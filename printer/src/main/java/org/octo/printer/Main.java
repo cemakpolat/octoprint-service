@@ -14,6 +14,15 @@ public class Main {
         apiKey = "8CBD168330C34283AFDB22D61AB54D04";
         octoprintURL = "http://localhost:5000";
         Device device = new Device();
+
+        // use case 1
+        // assuming that the product is ordered
+        // get initial status of the printer
+        // send it to the printer from the location
+        // print it
+        // observe printer and print the status
+        // receive the results
+
         // what are the rules that we have to define here? What kind of use cases
         // 1. Generate the access key and assign the URL
         //Get information from the virtual printer about its actual status

@@ -112,6 +112,10 @@ public class OctoPrintInterface {
         ConnectionCommand connectionCommand = new ConnectionCommand(this.octoprintInstance);
         connectionCommand.connectWithVirtualPort();
     }
+    /**
+     *
+     * example usage printer.connectWithPortName("/dev/ttyUSB0");
+     */
 
     public void connectWithPortName(final String portName) {
         ConnectionCommand connectionCommand = new ConnectionCommand(this.octoprintInstance);
@@ -410,39 +414,4 @@ public class OctoPrintInterface {
     public String getPrintingModel() {
         return this.modelName;
     }
-
-    public void handleProxyMessage(String json) {
-        System.out.println("incoming message:" + json);
-
-        // TODO Auto-generated method stub
-        //printer state
-        // bed temperature
-        // extruder temperature
-        // estimatd print time
-        // printing model
-        // x, y, z - xaxis, yaxis, zaxis
-
-    }
-
-    public static void main(String[] args) {
-        System.out.println();
-        String apiKey = "609671DDA7B84E10B6A6FB17FF7BC59B";
-        String octoprintURL = "http://127.0.0.1:5000";
-        OctoPrintInterface printer = new OctoPrintInterface(octoprintURL, apiKey);
-
-        // test codes
-        try {
-            printer.moveAxesRelativeToHome(50d, 50d, 0d);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        //printer.printModel("palm-coin_02mm_pla_mk3s_36m.gcode");
-        printer.getlatestJobStatus();
-        printer.getLatestMeasurements();
-        //printer.moveToHome();
-        //printer.initiate();
-        System.out.println(printer.getPrinterCurrentState());
-        printer.transferFileToPrinter("whistle_02mm_pla_mk3_34m.gcode");
-    }
-
 }
