@@ -36,7 +36,11 @@ public final class TemperatureInfo implements Jsonable, JSONLoader{
 	 * @return the actual Temp of the tool in degrees celsius
 	 */
 	public Double getActualTemp(){
-		return m_data.getDouble("actual");
+		if (m_data != null){
+			return m_data.getDouble("actual");
+		}
+		System.out.println("M_data is NULL!");
+		return 0.0;
 	}
 	
 	/**

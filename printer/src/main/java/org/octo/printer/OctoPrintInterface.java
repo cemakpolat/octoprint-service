@@ -173,7 +173,7 @@ public class OctoPrintInterface {
         if (printer.getCurrentState().isConnected()) {
             return printer.getBedTemp().getActualTemp();
         }
-        return 100.0;
+        return 0.0;
     }
 
     public void transferFileToPrinter(String fileName) {
@@ -394,7 +394,6 @@ public class OctoPrintInterface {
 
         Map<String, String> results = new HashMap<String, String>();
         this.getlatestJobStatus();
-        long ts = (new Date()).getTime();
         results.put(Constants.status, this.getPrinterCurrentState());
         results.put(Constants.bedTemperature, this.getBedTemperature().toString());
         results.put(Constants.extruderTemperature, this.getExtruderTemp().toString());

@@ -8,8 +8,8 @@ public class PrinterApplication {
 
 	public static void main(String[] args) {
 
-		Device device = new Device();
-		System.out.println(device);
+//		Device device = new Device();
+//		System.out.println(device);
 		SpringApplication.run(PrinterApplication.class, args);
 
 
