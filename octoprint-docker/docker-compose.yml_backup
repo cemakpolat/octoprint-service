@@ -5,7 +5,7 @@ services:
     image: octoprint/octoprint:1.3.6
     restart: unless-stopped
     ports:
-      - 50000:5000
+      - ${port}:5000
     # devices:
     # use `python -m serial.tools.miniterm` to see what the name is of the printer
     #  - /dev/ttyACM0:/dev/ttyACM0

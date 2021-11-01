@@ -8,6 +8,7 @@ public class Device {
     private static OctoPrintInterface printer = null;
 
 	public void Device() {
+
 	    System.out.println();
         apiKey = "083C5A02B2A948F1A6D42D1366591CEF";
         octoprintURL = "http://127.0.0.1:5000";

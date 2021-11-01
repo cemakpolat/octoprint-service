@@ -15,6 +15,7 @@ public class Main {
         octoprintURL = "http://localhost:5000";
         Device device = new Device();
 
+
         // use case 1
         // assuming that the product is ordered
         // get initial status of the printer

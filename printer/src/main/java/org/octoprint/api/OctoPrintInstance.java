@@ -132,7 +132,7 @@ public class OctoPrintInstance {
 		catch (final IOException e) {
 			output = null;
 		}
-		
+		System.out.println(statusCode +" "+successStatus);
 		if(statusCode==successStatus) {
 			return output;
 		}

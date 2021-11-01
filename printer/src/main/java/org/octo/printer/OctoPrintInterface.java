@@ -62,13 +62,12 @@ public class OctoPrintInterface {
                 final URL url = new URL(this.baseUrl);
                 this.octoprintInstance = new OctoPrintInstance(url.getHost(), url.getPort(), this.apiKey);
                 final SettingsCommand settingsCommand = new SettingsCommand(this.octoprintInstance);
-
                 try {
                     final Map<String, String> flatSettingsMap = settingsCommand.getFlatSettingsMap();
                     if (flatSettingsMap == null) {
                         LOG.error("Could not retrieve settings from octoprint instance.");
                     }
-                    print(this.octoprintInstance.getKey());
+                    print("Key is printed:"+this.octoprintInstance.getKey());
                 } catch (final OctoPrintAPIException e) {
                     LOG.error("Could not retrieve settings from octoprint instance.", e);
                 }
@@ -128,7 +127,8 @@ public class OctoPrintInterface {
     }
 
     public void printModel(String modelname) {
-        if (this.isPrinterConnected() || this.isPrinterReady()) {
+        System.out.println(this.isPrinterPrinting() +" "+ this.getPrinterCurrentState());
+        if ((this.isPrinterConnected() || this.isPrinterReady()) && !this.isPrinterPrinting()) {
             FileCommand fcommand = new FileCommand(this.octoprintInstance);
             List<OctoPrintFileInformation> lists = fcommand.listFiles();
 
@@ -136,10 +136,10 @@ public class OctoPrintInterface {
                 if (file.getName().equalsIgnoreCase(modelname)) {
                     fcommand.printFile(modelname);
                 }
-                //System.out.println(""+file.getName());
+                System.out.println(""+file.getName());
             }
         } else {
-            print("Printer is not connected");
+            print("Either printer is not connected or is already printing");
         }
     }
 
@@ -232,6 +232,7 @@ public class OctoPrintInterface {
     public boolean isPrinterPrinting() {
         PrinterCommand printerCommand = new PrinterCommand(this.octoprintInstance);
         PrinterState currentState = printerCommand.getCurrentState();
+        System.out.println(currentState.isPrinting());
         if (currentState != null) {
             if (currentState.isPrinting()) {
                 return true;

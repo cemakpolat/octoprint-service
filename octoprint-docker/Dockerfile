@@ -1,49 +1,87 @@
+ARG PYTHON_BASE_IMAGE=3.8-slim-buster
 
-FROM python:2.7
-EXPOSE 5000
-LABEL maintainer "gaetancollaud@gmail.com"
+FROM ubuntu AS s6build
+ARG S6_RELEASE
+ENV S6_VERSION ${S6_RELEASE:-v2.1.0.0}
+RUN apt-get update && apt-get install -y curl
+RUN echo "$(dpkg --print-architecture)"
+WORKDIR /tmp
+RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
+  && case "${dpkgArch##*-}" in \
+  amd64) ARCH='amd64';; \
+  arm64) ARCH='aarch64';; \
+  armhf) ARCH='armhf';; \
+  *) echo "unsupported architecture: $(dpkg --print-architecture)"; exit 1 ;; \
+  esac \
+  && set -ex \
+  && echo $S6_VERSION \
+  && curl -fsSLO "https://github.com/just-containers/s6-overlay/releases/download/$S6_VERSION/s6-overlay-$ARCH.tar.gz"
 
-ENV CURA_VERSION=15.04.6
-ARG tag=master
+
+FROM python:${PYTHON_BASE_IMAGE} AS build
+
+ARG octoprint_ref
+ENV octoprint_ref ${octoprint_ref:-master}
+
+RUN apt-get update && apt-get install -y \
+  avrdude \
+  build-essential \
+  cmake \
+  curl \
+  imagemagick \
+  ffmpeg \
+  fontconfig \
+  g++ \
+  git \
+  haproxy \
+  libjpeg-dev \
+  libjpeg62-turbo \
+  libprotobuf-dev \
+  libv4l-dev \
+  openssh-client \
+  v4l-utils \
+  xz-utils \
+  zlib1g-dev
+
+# unpack s6
+COPY --from=s6build /tmp /tmp
+RUN s6tar=$(find /tmp -name "s6-overlay-*.tar.gz") \
+  && tar xzf $s6tar -C / 
+
+# Install octoprint
+RUN	curl -fsSLO --compressed --retry 3 --retry-delay 10 \
+  https://github.com/OctoPrint/OctoPrint/archive/${octoprint_ref}.tar.gz \
+	&& mkdir -p /opt/octoprint \
+  && tar xzf ${octoprint_ref}.tar.gz --strip-components 1 -C /opt/octoprint --no-same-owner
 
 WORKDIR /opt/octoprint
+RUN pip install .
+RUN mkdir -p /octoprint/octoprint /octoprint/plugins
 
-# In case of alpine
-#RUN apk update && apk upgrade \
-#    && apk add --no-cache bash git openssh gcc\
-#		&& pip install virtualenv \
-#		&& rm -rf /var/cache/apk/*
-
-#install ffmpeg
-RUN cd /tmp \
-  && wget -O ffmpeg.tar.xz https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-i686-static.tar.xz \
-	&& mkdir -p /opt/ffmpeg \
-	&& tar xvf ffmpeg.tar.xz -C /opt/ffmpeg --strip-components=1 \
-  && rm -Rf /tmp/*
-
-#install Cura
-RUN cd /tmp \
-  && wget https://github.com/Ultimaker/CuraEngine/archive/${CURA_VERSION}.tar.gz \
-  && tar -zxf ${CURA_VERSION}.tar.gz \
-	&& cd CuraEngine-${CURA_VERSION} \
-	&& mkdir build \
-	&& make \
-	&& mv -f ./build /opt/cura/ \
-  && rm -Rf /tmp/*
-
-#Create an octoprint user
-RUN useradd -ms /bin/bash octoprint && adduser octoprint dialout
-RUN chown octoprint:octoprint /opt/octoprint
-USER octoprint
-#This fixes issues with the volume command setting wrong permissions
-RUN mkdir /home/octoprint/.octoprint
-
-#Install Octoprint
-RUN git clone --branch $tag https://github.com/foosel/OctoPrint.git /opt/octoprint \
-  && virtualenv venv \
-	&& ./venv/bin/python setup.py install
-
-VOLUME /home/octoprint/.octoprint
+# Install mjpg-streamer
+RUN curl -fsSLO --compressed --retry 3 --retry-delay 10 \
+  https://github.com/jacksonliam/mjpg-streamer/archive/master.tar.gz \
+  && mkdir /mjpg \
+  && tar xzf master.tar.gz -C /mjpg
 
 
-CMD ["/opt/octoprint/venv/bin/octoprint", "serve"]
+WORKDIR /mjpg/mjpg-streamer-master/mjpg-streamer-experimental
+RUN make
+RUN make install
+
+# Copy services into s6 servicedir and set default ENV vars
+COPY root /
+ENV CAMERA_DEV /dev/video0
+ENV MJPG_STREAMER_INPUT -n -r 640x480
+ENV PIP_USER true
+ENV PYTHONUSERBASE /octoprint/plugins
+ENV PATH "${PYTHONUSERBASE}/bin:${PATH}"
+# set WORKDIR 
+WORKDIR /octoprint
+
+# port to access haproxy frontend
+EXPOSE 80
+
+VOLUME /octoprint
+
+ENTRYPOINT ["/init"]
