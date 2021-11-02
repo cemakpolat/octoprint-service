@@ -1,1 +1,0 @@
-{"printer-dockers": [{"port": "50000", "name": "appv0_octoprint_1"}]}
