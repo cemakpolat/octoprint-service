@@ -7,12 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class PrinterApplication {
 
 	public static void main(String[] args) {
-
-//		Device device = new Device();
-//		System.out.println(device);
 		SpringApplication.run(PrinterApplication.class, args);
-
-
 	}
 
 }

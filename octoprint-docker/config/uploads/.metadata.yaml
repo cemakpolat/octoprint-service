@@ -1,0 +1,38 @@
+palm-coin_02mm_pla_mk3s_36m.gcode:
+  analysis:
+    dimensions:
+      depth: 134.157
+      height: 6.0
+      width: 151.522
+    estimatedPrintTime: 1625.5179547333382
+    filament:
+      tool0:
+        length: 2430.7672300001304
+        volume: 5.846680361646965
+    printingArea:
+      maxX: 151.522
+      maxY: 131.157
+      maxZ: 6.0
+      minX: 0.0
+      minY: -3.0
+      minZ: 0.0
+  hash: 23e4afae3082143e041995d6b019038694617995
+  history:
+  - printerProfile: _default
+    success: false
+    timestamp: 1635982383.710617
+  - printerProfile: _default
+    success: false
+    timestamp: 1635982501.042663
+  - printerProfile: _default
+    success: false
+    timestamp: 1635982670.145511
+  - printerProfile: _default
+    success: false
+    timestamp: 1635982801.305153
+  - printerProfile: _default
+    success: false
+    timestamp: 1635985081.93883
+  statistics:
+    averagePrintTime: {}
+    lastPrintTime: {}

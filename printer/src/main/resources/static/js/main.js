@@ -18,7 +18,7 @@ $(document).ready(function(){
     function doTheThing() {
         return new Promise((resolve, reject) => {
             $.ajax({
-                url: 'http://localhost:8080/greeting',
+                url: 'http://localhost:8080/greetings',
                 type: 'GET',
                 data: {
                     key: 'value',

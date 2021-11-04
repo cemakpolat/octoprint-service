@@ -154,6 +154,7 @@ def get_containers_details(search_tag):
             result.append({"name":container.name,"port":container.attrs['HostConfig']['PortBindings']['5000/tcp'][0]['HostPort'], "status":container.status,"ip":container.attrs['HostConfig']['PortBindings']['5000/tcp'][0]['HostIp']})
     return result
 
+
 # check whether the container is available
 def is_container_available(package_name):
     result = False

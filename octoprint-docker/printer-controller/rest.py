@@ -1,7 +1,7 @@
 import logging, json
 from flask import Flask, render_template, request
 from flask_cors import CORS, cross_origin
-import docker_interface, util, printer_decision
+import docker_interface, util, printer_decision, printable_models
 
 logger = logging.getLogger()
 app = Flask(__name__)
@@ -90,12 +90,7 @@ def get_all_status_printers():
 
 @app.route('/models', methods=["GET", "POST"])
 def get_all_models():
-    import os
-    files = os.listdir("../models/")
-    flist = []
-    for f in files:
-        if f.startswith(".") is False:
-            flist.append(f)
+    flist = printable_models.get_printable_models()
     return json.dumps({"result": flist})
 
 
@@ -109,4 +104,4 @@ def get_decided_printer():
 
 if __name__ == '__main__':
     docker_interface.start_printers(1)
-    app.run(host='0.0.0.0', port='8000', debug=True)
+    app.run(host='0.0.0.0', port='8001', debug=True)
