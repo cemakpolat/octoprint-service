@@ -14,6 +14,6 @@ def get_printable_models():
     files = os.listdir("../models/")
     flist = []
     for f in files:
-        if f.startswith(".") is False and f.endswith(".gcode"):
-            flist.append(f)
+        if not f.startswith(".") and f.endswith(".gcode"):
+            flist.append(f.split(".gcode")[0])
     return flist

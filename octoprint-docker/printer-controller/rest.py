@@ -13,13 +13,14 @@ def hello():
     return "hello world"
 
 
-@app.route('/printers', methods=["GET", "POST"])
+@app.route('/dockers/names', methods=["GET", "POST"])
 def get_printers():
     res = docker_interface.list_containers("octoprint")  # return only octoprint related containers
+
     return json.dumps({"result":res})
 
 
-@app.route('/printer/status', methods=["GET", "POST"])
+@app.route('/docker/status', methods=["GET", "POST"])
 def get_printer_status():
     container_name = request.values.get('printerid')
     if container_name:
@@ -30,7 +31,7 @@ def get_printer_status():
     return json.dumps(res)
 
 
-@app.route('/printer/stop', methods=["GET", "POST"])
+@app.route('/docker/stop', methods=["GET", "POST"])
 def deactivate_printer():
     container_name = request.values.get('printerid')
     if container_name:
@@ -45,7 +46,7 @@ def deactivate_printer():
     return json.dumps(res)
 
 
-@app.route('/printer/start', methods=["GET", "POST"])
+@app.route('/docker/start', methods=["GET", "POST"])
 def start_printer():
     container_name = request.values.get('printerid')
     if container_name:
@@ -60,30 +61,34 @@ def start_printer():
     return json.dumps(res)
 
 
-@app.route('/printers/start', methods=["GET", "POST"])
+@app.route('/dockers/start', methods=["GET", "POST"])
 def start_all_printers():
     number = request.values.get('printerCount')
-    docker_interface.start_printers(number)
+    print(number)
+    if number.isdigit():
+        docker_interface.start_printers(number)
+    else:
+        return json.dumps({'result':"number is not given" })
     return json.dumps({'result': True})
 
 
-@app.route('/printers/stop', methods=["GET", "POST"])
+@app.route('/dockers/stop', methods=["GET", "POST"])
 def stop_all_printers():
     docker_interface.stop_printers()
     return json.dumps({'result': True})
 
 
-@app.route('/printers/details', methods=["GET", "POST"])
+@app.route('/dockers/details', methods=["GET", "POST"])
 def get_printer_ports():
     # return a list of printer ports and names
     result = docker_interface.get_containers_details("octoprint")
-    return json.dumps({"result":result})
+    return json.dumps({"result": result})
 
 
-@app.route('/printers/status', methods=["GET", "POST"])
+@app.route('/dockers/status', methods=["GET", "POST"])
 def get_all_status_printers():
     stats = docker_interface.get_all_container_stats()
-    return json.dumps({"result":stats})
+    return json.dumps({"result": stats})
 
 
 #### Interacting with Printable Models
@@ -98,10 +103,17 @@ def get_all_models():
 
 @app.route('/printers/select', methods=["GET", "POST"])
 def get_decided_printer():
-    selected_printer = printer_decision.selectPrinter()
-    return json.dumps({"result":selected_printer})
+    productList = request.values.get('productList')
+    print("pinfiL",productList)
+    if productList:
+        res = printer_decision.selectPrinter(productList, strategy=None)
+    else:
+        res = "{}"
+        logger.log("container name is not given as a parameter")
+
+    return json.dumps({"result": res})
 
 
 if __name__ == '__main__':
-    docker_interface.start_printers(1)
+    docker_interface.start_printers(2)
     app.run(host='0.0.0.0', port='8001', debug=True)

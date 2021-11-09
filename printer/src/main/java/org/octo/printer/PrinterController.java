@@ -14,56 +14,53 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-public class PrinterStatusController {
 
-    private static final String template = "Hello, %s!";
+/**
+ *
+ // use case 1
+ // assuming that the product is ordered
+ // get initial status of the printer
+ // send it to the printer from the location
+ // print it
+ // observe printer and print the status
+ // receive the results
+
+ //End of the p rinting process
+ //Upload a gcode file through the API to the OctoPrint (where can I find a gcode file, download from open source projects)
+ //Initiate and monitor the process
+ //End the printing process.
+ // A single program that returns all request to the other parts
+
+ */
+
+@RestController
+public class PrinterController {
+
     private final AtomicLong counter = new AtomicLong();
     String apiKey = "1D8DF67AD9594E81A44830CF33936F55";
     String octoprintURL = "http://127.0.0.1";
     OctoPrintInterface printer = new OctoPrintInterface(octoprintURL,apiKey);
-
-    /**
-     *
-     // use case 1
-     // assuming that the product is ordered
-     // get initial status of the printer
-     // send it to the printer from the location
-     // print it
-     // observe printer and print the status
-     // receive the results
-
-     // what are the rules that we have to define here? What kind of use cases
-     // 1. Generate the access key and assign the URL
-     //Get information from the virtual printer about its actual status
-     //Get the existing files on the OctoPrint to print one of them
-     //Initiate the printing process of the selected file
-     //Monitor the printing process.
-     //End of the p rinting process
-     //Upload a gcode file through the API to the OctoPrint (where can I find a gcode file, download from open source projects)
-     //Initiate and monitor the process
-     //End the printing process.
-     // A single program that returns all request to the other parts
-     // 1. how to handle muliple request
-     //
-     */
+    private final Boolean virtualModeEnabled = true;
 
     private OctoPrintInterface getPrinter(String port){
-        String octoprintURL = "http://127.0.0.1"+":"+port;
-        return new OctoPrintInterface(octoprintURL,apiKey);
+        return new OctoPrintInterface(this.octoprintURL+":"+port,apiKey);
+    }
+    private OctoPrintInterface getPrinter(String url, String port){
+        return new OctoPrintInterface(url+":"+port,apiKey);
     }
 
-    @GetMapping("/printer/virtual/connect")
+
+    @GetMapping("/printer/connect")
     public PrinterStatus enableVirtualPrinter(@RequestParam(value = "port", defaultValue = "") String port) {
 
         printer = getPrinter(port);
-        if (printer.getPrinterCurrentState() == "UNKNOWN"){
+        if (printer.getPrinterCurrentState() == "UNKNOWN" && this.virtualModeEnabled){
             printer.connectWithVirtualPort();
         }
         return new PrinterStatus(counter.incrementAndGet(), String.format(printer.getPrinterCurrentState()));
     }
 
-    @GetMapping("/printer/virtual/disconnect")
+    @GetMapping("/printer/disconnect")
     public PrinterStatus disableVirtualPrinter(@RequestParam(value = "port", defaultValue = "") String port) {
 
         printer = getPrinter(port);
@@ -79,15 +76,15 @@ public class PrinterStatusController {
     @GetMapping("/printer/status")
     public PrinterStatus printerStatus(@RequestParam(value = "port", defaultValue = "") String port) {
         printer = getPrinter(port);
-        if (printer.getPrinterCurrentState() == "UNKNOWN"){
+        if (printer.getPrinterCurrentState() == "UNKNOWN" && this.virtualModeEnabled){
             printer.connectWithVirtualPort();
         }
         return new PrinterStatus(1,printer.getPrinterCurrentState());
     }
-    @GetMapping("/printer/product/status")
+    @GetMapping("/product/status")
     public PrinterStatus productStatus(@RequestParam(value = "port", defaultValue = "") String port) {
         printer = getPrinter(port);
-        if (printer.getPrinterCurrentState() == "UNKNOWN"){
+        if (printer.getPrinterCurrentState() == "UNKNOWN" && this.virtualModeEnabled){
             printer.connectWithVirtualPort();
         }
         return new PrinterStatus(1,printer.getLatestMeasurements().toString());
@@ -125,10 +122,9 @@ public class PrinterStatusController {
     public Status sendSelectedProduct(@RequestParam(value = "product", defaultValue = "") String selectedProduct,
                                       @RequestParam(value = "port", defaultValue = "") String port) {
         printer = getPrinter(port);
-        if (printer.getPrinterCurrentState() == "UNKNOWN"){
+        if (printer.getPrinterCurrentState() == "UNKNOWN" && this.virtualModeEnabled){
             printer.connectWithVirtualPort();
         }
-
         // select the printer, printer id and the development id
         String status = "";
         System.out.println("model:"+selectedProduct);

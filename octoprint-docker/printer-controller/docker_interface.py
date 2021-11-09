@@ -1,6 +1,7 @@
 import subprocess, logging, socket, json, os
 import util
 import docker
+import time
 
 
 # start all printers with a number
@@ -10,7 +11,7 @@ def start_printers(number):
     # data['printer-dockers'] = []
 
     plist = util.get_available_port_numbers(number)
-
+    print(plist)
     for i in range(len(plist)):
         with open("../docker-compose.yml_backup", "rt") as fin:
             with open("../docker-compose.yml", "wt") as fout:
@@ -20,11 +21,7 @@ def start_printers(number):
         stream = os.popen('docker-compose -f ../docker-compose.yml -p appv' + str(i) + ' up -d')
         output = stream.read()
         print(output)
-    #     data['printer-dockers'].append({
-    #         'port': plist[i],
-    #         'name': 'appv' + str(i) +"_octoprint_1"
-    #     })
-    # util.write_to_file(data)
+        time.sleep(2)
 
 
 # stop all printers dockers
@@ -66,12 +63,13 @@ def get_all_container_stats():
         stats.append(gather_container_stats(cnt))
     return stats
 
+
 # get docker statistics
 def gather_container_stats(container_name):
 
     """
     Used to gather the execution stats for a Docker Container by its ID
-    name, cpu, mem usae, net io,
+    name, cpu, mem usage, net io,
 
     :param container_id:
     :return:
@@ -81,7 +79,6 @@ def gather_container_stats(container_name):
     cid = get_container_id(container_name)
     if cid:
         res = api_client.stats(container=cid, stream=False)
-        print(res)
         # send only few data, not all
         """
         

@@ -21,22 +21,26 @@ Printable-Product-Owner :{
 import docker_interface
 import logging
 import random
+import requests
 
-
-# call rest of the java app
-# see the printer is not printing
-# select randomly the printer
 
 def get_status_of_printer(printer):
-    printer_data = ""
-    return printer_data
+    port = {"port": printer["port"]}
+    r = requests.get('http://localhost:8080/printer/status', params=port)
+    return r.json()
 
 
 def is_printer_free(printer):
-    return True
+    response = get_status_of_printer(printer)
+    if response["content"] == "OPERATIONAL" or response["content"] == "READY":
+        return True
+    else:
+        print("Printer cannot be selected since it is in the mode "+response["content"])
+
+    return False
 
 
-def selectPrinter(strategy="random"):
+def selectPrinter(productList, strategy=None):
     """
     1. get all port numbers from docker-interface
     2. call the java api for each port to see whether the printer is running or not
@@ -44,22 +48,18 @@ def selectPrinter(strategy="random"):
     4. choose randomly one of the printers
     5. future task: based on the printer features, take different decisions.
     """
-    print("selected printer into")
-    selected_printer = None
     printers = docker_interface.get_containers_details("octoprint")
 
     non_occupied_printers = []
-    print("printers", printers)
 
     for printer in printers:
         if is_printer_free(printer):
             non_occupied_printers.append(printer)
-        print(printer)
 
-    if strategy == "random":
-        selected_printer = select_randomly(non_occupied_printers)
+    print("strategy is none", strategy)
+    selected_printer = select_randomly(non_occupied_printers)
 
-    logging.info("Selected printer: ", selected_printer)
+    print("Selected printer: ", selected_printer)
     return selected_printer
 
 
@@ -83,3 +83,43 @@ class ProductModel:
         self.name = "name"
         self.creator = "Cem Akpolat"
         self.complexity = "100" # 0-100
+
+
+
+#
+# import threading
+# import logging
+# import time
+#
+# logging.basicConfig(level=logging.DEBUG,
+#                     format='(%(threadName)-10s) %(message)s',
+#                     )
+# productList = [1]
+# class MyThreadWithArgs(threading.Thread):
+#
+#     def __init__(self, group=None, target=None, name=None,
+#                  args=(), kwargs=None, verbose=None):
+#         threading.Thread.__init__(self, group=group, target=target, name=name)
+#         self.args = args
+#         self.kwargs = kwargs
+#         return
+#
+#     def run(self):
+#         while len(productList) > 0 :
+#             logging.debug('running with %s and %s, size %s', self.args, self.kwargs, str(len(productList)))
+#             time.sleep(3)
+#
+#             if len(productList) > 5:
+#                 logging.debug("removing item ...")
+#                 productList.pop()
+#                 logging.debug("current length: %s", str(len(productList)))
+#             else:
+#                 productList.append("aa")
+#
+#         return
+#
+#
+# for i in range(5):
+#     t = MyThreadWithArgs(args=(i,), kwargs={'a':'A', 'b':'B'})
+#     t.start()
+# 

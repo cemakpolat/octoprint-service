@@ -14,9 +14,11 @@ def read_from_file():
 
 
 def get_available_port_numbers(number):
+    print("incoming number:", number)
     # starting point 50000
     plist = []
     i = 0
+    number = int(number)
     while i < number:
         if is_port_free(int("5000"+str(i))) is True:
             plist.append("5000"+str(i))
