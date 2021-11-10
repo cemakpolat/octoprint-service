@@ -4,6 +4,7 @@ from flask_cors import CORS, cross_origin
 import docker_interface, util, printer_decision, printable_models
 
 logger = logging.getLogger()
+
 app = Flask(__name__)
 CORS(app, support_credentials=True)
 
@@ -91,7 +92,7 @@ def get_all_status_printers():
     return json.dumps({"result": stats})
 
 
-#### Interacting with Printable Models
+# Interacting with Printable Models
 
 @app.route('/models', methods=["GET", "POST"])
 def get_all_models():
@@ -99,19 +100,29 @@ def get_all_models():
     return json.dumps({"result": flist})
 
 
-#### Printer Decision
+# Printer Decision
 
 @app.route('/printers/select', methods=["GET", "POST"])
-def get_decided_printer():
-    productList = request.values.get('productList')
-    print("pinfiL",productList)
-    if productList:
-        res = printer_decision.selectPrinter(productList, strategy=None)
+def assign_printer():
+
+    product_list = request.values.get('productList')
+    print("assets list to be added:", product_list)
+
+    if product_list and printer_decision.add_to_asset_list(product_list):
+        res = "The {products} are added to the list".format(products=str(product_list))
     else:
-        res = "{}"
-        logger.log("container name is not given as a parameter")
+        res = "The product list is empty!"
+        logger.warning("container name is not given as a parameter")
 
     return json.dumps({"result": res})
+
+
+@app.route('/printers/assets', methods=["GET", "POST"])
+def get_assets_in_printing_process():
+
+    return json.dumps({"result": printer_decision.assets_in_printing_list})
+
+
 
 
 if __name__ == '__main__':
