@@ -17,6 +17,8 @@ import org.octoprint.api.model.OctoPrintFolder;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,10 +121,23 @@ public class FileCommand extends OctoPrintCommand {
 	 * @param fileName
 	 * @param uploadLocation
 	 */
-	public void uploadFile(final String fileName, String uploadLocation) {
+	public void uploadFile(final String fileName, String uploadLocation)  {
 		ClassLoader classLoader = this.getClass().getClassLoader();
-		System.out.println("filename"+fileName +" upload location:"+uploadLocation);
-		File file = new File(classLoader.getResource(fileName).getFile());
+		System.out.println("filename:"+fileName +" upload location:"+uploadLocation);
+		URL resource = getClass().getClassLoader().getResource(fileName);
+		File file =  null;
+		if (resource == null) {
+			throw new IllegalArgumentException("file not found!");
+		} else {
+			try {
+				file = new File(resource.toURI());
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+
+			}
+		}
+//		File file = new File(classLoader.getResource(fileName).getFile());
+		System.out.println("file:"+ file.getName());
 
 		FileBody fileBody = new FileBody(file, ContentType.DEFAULT_BINARY);
 

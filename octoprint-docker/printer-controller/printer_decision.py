@@ -22,9 +22,15 @@ def get_status_of_printer(printer):
     return r.json()
 
 
+def print_product(printer, product):
+    port = {"port": printer["port"],"product":product}
+    r = requests.get('http://localhost:8080/printer/print', params=port)
+    return r.json()
+
+
 def is_printer_free(printer):
     response = get_status_of_printer(printer)
-    if response["content"] == "OPERATIONAL" or response["content"] == "READY":
+    if response["content"] == "OPERATIONAL" or response["content"] == "READY" or response["content"] == "CONNECTED" :
         return True
     else:
         print("Printer cannot be selected since it is in the mode "+response["content"])
@@ -48,7 +54,7 @@ def add_to_asset_list(products):
                 "assignedPrinterName": "",
                 "status": "waiting"
             }
-
+            print("added object:", item)
             assets_in_printing_list.append(item)
         return True
     else:
@@ -59,11 +65,13 @@ def add_to_asset_list(products):
 def assign_printer(products, printers):
     for product in products:
         if len(printers) > 0 and product["status"] == "waiting":
-            # TODO: Selection strategy can be applied at that point
             sprinter = strategy.select_randomly(printers)
+
             product["assignedPrinterName"] = sprinter["name"]
             product["status"] = "printing"
+            print_product(sprinter,product["name"])
             printers.remove(sprinter)
+            print("printer is selected", sprinter)
 
 
 class PrinterObserver(threading.Thread):
@@ -78,7 +86,9 @@ class PrinterObserver(threading.Thread):
     def run(self):
         # estimated printing duration is not involved in the system.
         while observer_running:
-
+            print("observer is running")
+            # global assets_in_printing_list
+            print(assets_in_printing_list)
             if len(assets_in_printing_list) > 0:
                 printers = docker_interface.get_containers_details("octoprint")
 
@@ -86,7 +96,11 @@ class PrinterObserver(threading.Thread):
 
                 for printer in printers:
                     if is_printer_free(printer):
+                        print("selected printer", printer)
                         non_occupied_printers.append(printer)
+
+                if len(non_occupied_printers) > 0:
+                    assign_printer(assets_in_printing_list, non_occupied_printers)
 
                 # filter the completed works
                 for printer in non_occupied_printers:
@@ -94,9 +108,10 @@ class PrinterObserver(threading.Thread):
                         if item["assignedPrinterName"] == printer["name"]:
                             assets_in_printing_list.remove(item)
 
-                assign_printer(assets_in_printing_list, non_occupied_printers)
-
+                else:
+                    print("all printers are occupied...")
             else:
+                print("asset list is empty!")
                 time.sleep(5)
 
             time.sleep(5)

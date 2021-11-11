@@ -9,30 +9,9 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.octo.printer.models.PrinterStatus;
 import org.octo.printer.models.SelectedProduct;
 import org.octo.printer.models.Status;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-
-/**
- *
- // use case 1
- // assuming that the product is ordered
- // get initial status of the printer
- // send it to the printer from the location
- // print it
- // observe printer and print the status
- // receive the results
-
- //End of the p rinting process
- //Upload a gcode file through the API to the OctoPrint (where can I find a gcode file, download from open source projects)
- //Initiate and monitor the process
- //End the printing process.
- // A single program that returns all request to the other parts
-
- */
-
+@CrossOrigin
 @RestController
 public class PrinterController {
 
@@ -48,7 +27,6 @@ public class PrinterController {
     private OctoPrintInterface getPrinter(String url, String port){
         return new OctoPrintInterface(url+":"+port,apiKey);
     }
-
 
     @GetMapping("/printer/connect")
     public PrinterStatus enableVirtualPrinter(@RequestParam(value = "port", defaultValue = "") String port) {
@@ -81,6 +59,8 @@ public class PrinterController {
         }
         return new PrinterStatus(1,printer.getPrinterCurrentState());
     }
+
+
     @GetMapping("/product/status")
     public PrinterStatus productStatus(@RequestParam(value = "port", defaultValue = "") String port) {
         printer = getPrinter(port);
@@ -121,6 +101,7 @@ public class PrinterController {
     @GetMapping("/printer/print")
     public Status sendSelectedProduct(@RequestParam(value = "product", defaultValue = "") String selectedProduct,
                                       @RequestParam(value = "port", defaultValue = "") String port) {
+        System.out.println("called:" + selectedProduct +" "+port);
         printer = getPrinter(port);
         if (printer.getPrinterCurrentState() == "UNKNOWN" && this.virtualModeEnabled){
             printer.connectWithVirtualPort();
@@ -129,10 +110,11 @@ public class PrinterController {
         String status = "";
         System.out.println("model:"+selectedProduct);
         System.out.println(printer.isPrinterConnected());
+        selectedProduct = "9_snowflakes.gcode";
         if (selectedProduct != null){
             printer.transferFileToPrinter(selectedProduct);
+            printer.printModel("palm-coin_02mm_pla_mk3s_36m.gcode");
             printer.printModel(selectedProduct);
-        //printer.printModel("palm-coin_02mm_pla_mk3s_36m.gcode");
             status = printer.getPrinterCurrentState();
         }
         return new Status(status);

@@ -1,3 +1,22 @@
+3DBenchy_0.15mm_PLA_MK3S_2h.gcode:
+  analysis:
+    dimensions:
+      depth: 136.059
+      height: 48.05
+      width: 153.058
+    estimatedPrintTime: 5720.083611350896
+    filament:
+      tool0:
+        length: 4021.6806400006517
+        volume: 9.673275552059481
+    printingArea:
+      maxX: 153.058
+      maxY: 133.059
+      maxZ: 48.05
+      minX: 0.0
+      minY: -3.0
+      minZ: 0.0
+  hash: 87bf594450e0734e4ad7a1ec441da6fe92feb005
 palm-coin_02mm_pla_mk3s_36m.gcode:
   analysis:
     dimensions:
@@ -33,6 +52,26 @@ palm-coin_02mm_pla_mk3s_36m.gcode:
   - printerProfile: _default
     success: false
     timestamp: 1635985081.93883
+  - printerProfile: _default
+    success: false
+    timestamp: 1636575505.405836
+  - printTime: 940.1771841049194
+    printerProfile: _default
+    success: true
+    timestamp: 1636576562.911708
+  - printTime: 921.2564129829407
+    printerProfile: _default
+    success: true
+    timestamp: 1636577510.83728
+  - printTime: 938.4288249015808
+    printerProfile: _default
+    success: true
+    timestamp: 1636579883.750937
+  - printerProfile: _default
+    success: false
+    timestamp: 1636632961.517417
   statistics:
-    averagePrintTime: {}
-    lastPrintTime: {}
+    averagePrintTime:
+      _default: 933.2874739964803
+    lastPrintTime:
+      _default: 938.4288249015808

@@ -104,9 +104,8 @@ def get_all_models():
 
 @app.route('/printers/select', methods=["GET", "POST"])
 def assign_printer():
-
-    product_list = request.values.get('productList')
-    print("assets list to be added:", product_list)
+    product_list = request.form.getlist('products[]')
+    print("Assets to be printed:", product_list)
 
     if product_list and printer_decision.add_to_asset_list(product_list):
         res = "The {products} are added to the list".format(products=str(product_list))
@@ -123,8 +122,7 @@ def get_assets_in_printing_process():
     return json.dumps({"result": printer_decision.assets_in_printing_list})
 
 
-
-
 if __name__ == '__main__':
     docker_interface.start_printers(2)
+    printer_decision.start_observer()
     app.run(host='0.0.0.0', port='8001', debug=True)
