@@ -1,11 +1,11 @@
 /:
-- _count: 8
-  _timestamp: 1636633141.128736
+- _count: 9
+  _timestamp: 1636641731.469252
   base_url: http://localhost:50003/
   path: /
   query_string: l10n=en
-- _count: 4
-  _timestamp: 1636632927.406343
+- _count: 9
+  _timestamp: 1636641545.192649
   base_url: http://localhost:50002/
   path: /
   query_string: l10n=en

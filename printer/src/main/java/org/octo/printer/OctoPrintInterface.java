@@ -12,9 +12,17 @@ import org.octoprint.api.model.OctoPrintJob.JobProgress;
 import org.octoprint.api.model.PrinterState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 import org.togglz.core.util.Validate;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,7 +40,7 @@ public class OctoPrintInterface {
     public OctoPrintInstance octoprintInstance = null;
     public String apiKey = "609671DDA7B84E10B6A6FB17FF7BC59B";
     public String baseUrl = "http://localhost:5000";
-
+    public static String modelsFolder = "../models";
     private Long estimatedPrintTime = null;
     private Double estimatedFilamentUsage = null;
     private Long remainingPrintTime = null;
@@ -43,6 +51,7 @@ public class OctoPrintInterface {
         this.apiKey = apiKey;
         this.baseUrl = url + ":" + port;
         this.initiate();
+
     }
 
     public OctoPrintInterface(String url, String apiKey) {
@@ -50,6 +59,7 @@ public class OctoPrintInterface {
         this.baseUrl = url;
         this.initiate();
 //        System.out.println(this.baseUrl + " " + this.apiKey);
+        print(modelsFolder);
     }
 
     public void print(String str) {
@@ -178,6 +188,7 @@ public class OctoPrintInterface {
 
     public void transferFileToPrinter(String fileName) {
         if (new PrinterCommand(this.octoprintInstance).getCurrentState().isConnected()) {
+            new FileCommand(this.octoprintInstance).deleteFile("palm-coin_02mm_pla_mk3s_36m.gcode");
             new FileCommand(this.octoprintInstance).uploadFile(fileName);
         }
     }

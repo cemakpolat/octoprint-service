@@ -2,6 +2,7 @@ package org.octoprint.api;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -17,8 +18,6 @@ import org.octoprint.api.model.OctoPrintFolder;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,7 +108,7 @@ public class FileCommand extends OctoPrintCommand {
 		OctoPrintHttpRequest request = this.createRequest("local/" + filename);
 		request.setType("POST");
 		
-		//set the payloud
+		//set the payload
 		request.addParam("command", "select");
 		request.addParam("print", true);
 		
@@ -121,21 +120,10 @@ public class FileCommand extends OctoPrintCommand {
 	 * @param fileName
 	 * @param uploadLocation
 	 */
-	public void uploadFile(final String fileName, String uploadLocation)  {
-		ClassLoader classLoader = this.getClass().getClassLoader();
+	public void uploadFile(final String fileName, String uploadLocation) {
+//		ClassLoader classLoader = this.getClass().getClassLoader();
 		System.out.println("filename:"+fileName +" upload location:"+uploadLocation);
-		URL resource = getClass().getClassLoader().getResource(fileName);
-		File file =  null;
-		if (resource == null) {
-			throw new IllegalArgumentException("file not found!");
-		} else {
-			try {
-				file = new File(resource.toURI());
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-
-			}
-		}
+		File file = new File("../models/"+fileName);
 //		File file = new File(classLoader.getResource(fileName).getFile());
 		System.out.println("file:"+ file.getName());
 
@@ -148,6 +136,24 @@ public class FileCommand extends OctoPrintCommand {
 
 		HttpPost request = new HttpPost(g_comm.getURL()+ "/api/files/" +uploadLocation);
 		request.setEntity(entity);
+		request.setHeader("X-Api-Key", g_comm.getKey());
+
+		HttpClient client = HttpClientBuilder.create().build();
+
+		try {
+			client.execute(request);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+	public void deleteFile(final String fileName, String uploadLocation) {
+		System.out.println("delete filename:"+fileName +" upload location:"+uploadLocation);
+		File file = new File("../models/"+fileName);
+		System.out.println("file:"+ file.getName());
+
+		HttpDelete request = new HttpDelete(g_comm.getURL()+ "/api/files/" +uploadLocation+"/"+fileName);
+
 		request.setHeader("X-Api-Key", g_comm.getKey());
 
 		HttpClient client = HttpClientBuilder.create().build();
@@ -178,6 +184,14 @@ public class FileCommand extends OctoPrintCommand {
 	 */
 	public void uploadFile(final String fileName) {
 		uploadFile(fileName, "local");
+	}
+
+	/**
+	 * Upload the file to the local api/files/local folder in the octoprint
+	 * @param fileName
+	 */
+	public void deleteFile(final String fileName) {
+		deleteFile(fileName, "local");
 	}
 
 	/**

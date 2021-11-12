@@ -9,17 +9,25 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.octo.printer.models.PrinterStatus;
 import org.octo.printer.models.SelectedProduct;
 import org.octo.printer.models.Status;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
 public class PrinterController {
+    @Value("${app.title}")
+    private String appTitle;
 
     private final AtomicLong counter = new AtomicLong();
-    String apiKey = "1D8DF67AD9594E81A44830CF33936F55";
-    String octoprintURL = "http://127.0.0.1";
-    OctoPrintInterface printer = new OctoPrintInterface(octoprintURL,apiKey);
+    private String apiKey = "1D8DF67AD9594E81A44830CF33936F55";
+    private String octoprintURL = "http://127.0.0.1";
+    private OctoPrintInterface printer = new OctoPrintInterface(octoprintURL,apiKey);
     private final Boolean virtualModeEnabled = true;
+
+    private PrinterController(){
+
+    }
 
     private OctoPrintInterface getPrinter(String port){
         return new OctoPrintInterface(this.octoprintURL+":"+port,apiKey);
@@ -110,10 +118,10 @@ public class PrinterController {
         String status = "";
         System.out.println("model:"+selectedProduct);
         System.out.println(printer.isPrinterConnected());
-        selectedProduct = "9_snowflakes.gcode";
+        selectedProduct = selectedProduct+".gcode";
         if (selectedProduct != null){
             printer.transferFileToPrinter(selectedProduct);
-            printer.printModel("palm-coin_02mm_pla_mk3s_36m.gcode");
+            printer.printModel(selectedProduct);
             printer.printModel(selectedProduct);
             status = printer.getPrinterCurrentState();
         }

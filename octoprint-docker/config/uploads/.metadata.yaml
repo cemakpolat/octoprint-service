@@ -1,3 +1,32 @@
+3DBenchy-S3D-Kossel-v3.gcode:
+  analysis:
+    dimensions:
+      depth: 30.603
+      height: 47.6
+      width: 59.583
+    estimatedPrintTime: 6227.91258858996
+    filament:
+      tool0:
+        length: 4438.069999999389
+        volume: 0.0
+    printingArea:
+      maxX: 29.783
+      maxY: 15.301
+      maxZ: 47.9
+      minX: -29.8
+      minY: -15.302
+      minZ: 0.3
+  hash: aae6869d22d39b4da882ab127c5a0d464e3ea467
+  history:
+  - printTime: 1819.1503410339355
+    printerProfile: _default
+    success: true
+    timestamp: 1636643536.333322
+  statistics:
+    averagePrintTime:
+      _default: 1819.1503410339355
+    lastPrintTime:
+      _default: 1819.1503410339355
 3DBenchy_0.15mm_PLA_MK3S_2h.gcode:
   analysis:
     dimensions:
@@ -17,61 +46,26 @@
       minY: -3.0
       minZ: 0.0
   hash: 87bf594450e0734e4ad7a1ec441da6fe92feb005
-palm-coin_02mm_pla_mk3s_36m.gcode:
+9_snowflakes.gcode:
   analysis:
     dimensions:
-      depth: 134.157
-      height: 6.0
-      width: 151.522
-    estimatedPrintTime: 1625.5179547333382
+      depth: 161.45600000000002
+      height: 1.7000000000000002
+      width: 144.60199999999998
+    estimatedPrintTime: 2550.6978007032412
     filament:
       tool0:
-        length: 2430.7672300001304
-        volume: 5.846680361646965
+        length: 1459.479
+        volume: 0.0
     printingArea:
-      maxX: 151.522
-      maxY: 131.157
-      maxZ: 6.0
-      minX: 0.0
-      minY: -3.0
-      minZ: 0.0
-  hash: 23e4afae3082143e041995d6b019038694617995
-  history:
-  - printerProfile: _default
-    success: false
-    timestamp: 1635982383.710617
-  - printerProfile: _default
-    success: false
-    timestamp: 1635982501.042663
-  - printerProfile: _default
-    success: false
-    timestamp: 1635982670.145511
-  - printerProfile: _default
-    success: false
-    timestamp: 1635982801.305153
-  - printerProfile: _default
-    success: false
-    timestamp: 1635985081.93883
-  - printerProfile: _default
-    success: false
-    timestamp: 1636575505.405836
-  - printTime: 940.1771841049194
-    printerProfile: _default
-    success: true
-    timestamp: 1636576562.911708
-  - printTime: 921.2564129829407
-    printerProfile: _default
-    success: true
-    timestamp: 1636577510.83728
-  - printTime: 938.4288249015808
-    printerProfile: _default
-    success: true
-    timestamp: 1636579883.750937
-  - printerProfile: _default
-    success: false
-    timestamp: 1636632961.517417
-  statistics:
-    averagePrintTime:
-      _default: 933.2874739964803
-    lastPrintTime:
-      _default: 938.4288249015808
+      maxX: 145.438
+      maxY: 162.21
+      maxZ: 1.87
+      minX: 0.836
+      minY: 0.754
+      minZ: 0.17
+  hash: cda7cd5badd17b6112392db3154a00a2bc4ec7ab
+model1.gcode:
+  hash: da39a3ee5e6b4b0d3255bfef95601890afd80709
+  links: []
+  notes: []
