@@ -1,25 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="48d4c5f5-da5b-4604-8224-c08cb983238e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../../printer/src/main/java/org/octo/printer/ConfigProperties.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../config/data/preemptive_cache_config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../config/data/preemptive_cache_config.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../config/data/print_recovery_data.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../config/logs/serial.log" beforeDir="false" afterPath="$PROJECT_DIR$/../config/logs/serial.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../config/logs/serial.log.2021-11-11_12-07-35" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../config/logs/serial.log.2021-11-11_12-07-36" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../config/logs/serial.log.2021-11-11_12-18-06" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../config/uploads/.metadata.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../config/uploads/.metadata.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../config/uploads/palm-coin_02mm_pla_mk3s_36m.gcode" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../printer/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../printer/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../printer/src/main/java/org/octo/printer/OctoPrintInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../printer/src/main/java/org/octo/printer/OctoPrintInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../printer/src/main/java/org/octo/printer/PrinterApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../printer/src/main/java/org/octo/printer/PrinterApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../printer/src/main/java/org/octo/printer/PrinterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../printer/src/main/java/org/octo/printer/PrinterController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../printer/src/main/java/org/octoprint/api/FileCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../printer/src/main/java/org/octoprint/api/FileCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../printer/src/main/java/org/octoprint/api/OctoPrintInstance.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../printer/src/main/java/org/octoprint/api/OctoPrintInstance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../printer/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../../printer/src/main/resources/application.properties" afterDir="false" />
-    </list>
+    <list default="true" id="48d4c5f5-da5b-4604-8224-c08cb983238e" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,8 +13,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docker_interface.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2159">
-              <caret line="130" column="4" selection-start-line="130" selection-start-column="4" selection-end-line="130" selection-end-column="4" />
+            <state relative-caret-position="2278">
+              <caret line="134" column="26" lean-forward="true" selection-start-line="134" selection-start-column="26" selection-end-line="134" selection-end-column="26" />
               <folding>
                 <element signature="e#0#44#0" expanded="true" />
               </folding>
@@ -40,13 +22,25 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rest.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="471">
-              <caret line="31" column="26" selection-start-line="31" selection-start-column="26" selection-end-line="31" selection-end-column="26" />
+            <state relative-caret-position="103">
+              <caret line="69" column="35" selection-start-line="69" selection-start-column="35" selection-end-line="69" selection-end-column="35" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/printer_decision.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="319">
+              <caret line="61" column="46" selection-start-line="61" selection-start-column="46" selection-end-line="61" selection-end-column="46" />
+              <folding>
+                <element signature="e#0#23#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -66,6 +60,7 @@
       <find>docker</find>
       <find>dockerCount</find>
       <find>get_available_port_numbers</find>
+      <find>start_observer</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -76,20 +71,21 @@
       <list>
         <option value="$PROJECT_DIR$/containerattr.json" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/util.py" />
-        <option value="$PROJECT_DIR$/docker_interface.py" />
-        <option value="$PROJECT_DIR$/printable_models.py" />
         <option value="$PROJECT_DIR$/strategy.py" />
+        <option value="$PROJECT_DIR$/printable_models.py" />
         <option value="$PROJECT_DIR$/rest.py" />
+        <option value="$PROJECT_DIR$/util.py" />
+        <option value="$PROJECT_DIR$/printer_rest.py" />
         <option value="$PROJECT_DIR$/printer_decision.py" />
+        <option value="$PROJECT_DIR$/docker_interface.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="10" />
-    <option name="y" value="23" />
-    <option name="width" value="1435" />
-    <option name="height" value="1027" />
+    <option name="x" value="240" />
+    <option name="y" value="125" />
+    <option name="width" value="1440" />
+    <option name="height" value="793" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -171,11 +167,11 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="10" y="23" width="1435" height="1027" extended-state="0" />
+    <frame x="240" y="125" width="1440" height="793" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49625668" visible="true" weight="0.17963225" />
-      <window_info id="Structure" order="1" sideWeight="0.5037433" side_tool="true" visible="true" weight="0.17963225" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49215406" visible="true" weight="0.14094433" />
+      <window_info id="Structure" order="1" sideWeight="0.50784594" side_tool="true" visible="true" weight="0.14094433" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
@@ -208,23 +204,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/util.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="328">
-          <caret line="26" column="14" selection-start-line="26" selection-start-column="14" selection-end-line="26" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/printable_models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="17" lean-forward="true" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///Library/Python/3.8/site-packages/urllib3/connection.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-3690">
@@ -239,17 +218,53 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/printer_decision.py">
+    <entry file="file://$USER_HOME$/Library/Caches/PyCharmCE2019.1/python_stubs/-2066100795/time.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="89">
-          <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
+        <state relative-caret-position="192">
+          <caret line="205" column="4" selection-start-line="205" selection-start-column="4" selection-end-line="205" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/printer_rest.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="697">
+          <caret line="41" column="17" lean-forward="true" selection-start-line="41" selection-start-column="17" selection-end-line="41" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/printers.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/users.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/products.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/printable_models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="37" selection-start-line="15" selection-start-column="37" selection-end-line="15" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/docker_interface.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2159">
-          <caret line="130" column="4" selection-start-line="130" selection-start-column="4" selection-end-line="130" selection-end-column="4" />
+        <state relative-caret-position="2278">
+          <caret line="134" column="26" lean-forward="true" selection-start-line="134" selection-start-column="26" selection-end-line="134" selection-end-column="26" />
           <folding>
             <element signature="e#0#44#0" expanded="true" />
           </folding>
@@ -258,10 +273,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rest.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="471">
-          <caret line="31" column="26" selection-start-line="31" selection-start-column="26" selection-end-line="31" selection-end-column="26" />
+        <state relative-caret-position="103">
+          <caret line="69" column="35" selection-start-line="69" selection-start-column="35" selection-end-line="69" selection-end-column="35" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/printer_decision.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="319">
+          <caret line="61" column="46" selection-start-line="61" selection-start-column="46" selection-end-line="61" selection-end-column="46" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>

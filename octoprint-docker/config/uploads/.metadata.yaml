@@ -22,6 +22,12 @@
     printerProfile: _default
     success: true
     timestamp: 1636643536.333322
+  - printerProfile: _default
+    success: false
+    timestamp: 1636755835.412118
+  - printerProfile: _default
+    success: false
+    timestamp: 1636765113.461888
   statistics:
     averagePrintTime:
       _default: 1819.1503410339355
@@ -46,6 +52,13 @@
       minY: -3.0
       minZ: 0.0
   hash: 87bf594450e0734e4ad7a1ec441da6fe92feb005
+  history:
+  - printerProfile: _default
+    success: false
+    timestamp: 1636762677.705622
+  statistics:
+    averagePrintTime: {}
+    lastPrintTime: {}
 9_snowflakes.gcode:
   analysis:
     dimensions:
@@ -65,7 +78,166 @@
       minY: 0.754
       minZ: 0.17
   hash: cda7cd5badd17b6112392db3154a00a2bc4ec7ab
+  history:
+  - printTime: 1311.103912115097
+    printerProfile: _default
+    success: true
+    timestamp: 1636766725.258444
+  statistics:
+    averagePrintTime:
+      _default: 1311.103912115097
+    lastPrintTime:
+      _default: 1311.103912115097
 model1.gcode:
+  analysis:
+    dimensions:
+      depth: 0.0
+      height: 0.0
+      width: 0.0
+    filament:
+      tool0:
+        length: 0.0
+        volume: 0.0
+    printingArea:
+      maxX: null
+      maxY: null
+      maxZ: null
+      minX: null
+      minY: null
+      minZ: null
   hash: da39a3ee5e6b4b0d3255bfef95601890afd80709
+  history:
+  - printTime: 0.01028895378112793
+    printerProfile: _default
+    success: true
+    timestamp: 1636754935.723998
+  - printTime: 0.010685920715332031
+    printerProfile: _default
+    success: true
+    timestamp: 1636754935.926958
+  - printTime: 0.009985923767089844
+    printerProfile: _default
+    success: true
+    timestamp: 1636755115.568267
+  - printTime: 0.010398149490356445
+    printerProfile: _default
+    success: true
+    timestamp: 1636755115.752038
+  links: []
+  notes: []
+  statistics:
+    averagePrintTime:
+      _default: 0.010339736938476562
+    lastPrintTime:
+      _default: 0.010398149490356445
+model2.gcode:
+  analysis:
+    dimensions:
+      depth: 0.0
+      height: 0.0
+      width: 0.0
+    filament:
+      tool0:
+        length: 0.0
+        volume: 0.0
+    printingArea:
+      maxX: null
+      maxY: null
+      maxZ: null
+      minX: null
+      minY: null
+      minZ: null
+  hash: da39a3ee5e6b4b0d3255bfef95601890afd80709
+  history:
+  - printTime: 0.009483098983764648
+    printerProfile: _default
+    success: true
+    timestamp: 1636760042.204703
+  - printTime: 0.008593082427978516
+    printerProfile: _default
+    success: true
+    timestamp: 1636760042.389004
+  - printTime: 0.00832986831665039
+    printerProfile: _default
+    success: true
+    timestamp: 1636760253.07705
+  - printTime: 0.010031938552856445
+    printerProfile: _default
+    success: true
+    timestamp: 1636760253.244314
+  - printTime: 0.008932113647460938
+    printerProfile: _default
+    success: true
+    timestamp: 1636761367.225763
+  - printTime: 0.009279012680053711
+    printerProfile: _default
+    success: true
+    timestamp: 1636761367.398293
+  - printTime: 0.009145975112915039
+    printerProfile: _default
+    success: true
+    timestamp: 1636761888.699946
+  - printTime: 0.009454011917114258
+    printerProfile: _default
+    success: true
+    timestamp: 1636761888.888523
+  - printTime: 0.012446880340576172
+    printerProfile: _default
+    success: true
+    timestamp: 1636762267.138016
+  - printTime: 0.011175155639648438
+    printerProfile: _default
+    success: true
+    timestamp: 1636762267.331464
+  - printTime: 0.008977174758911133
+    printerProfile: _default
+    success: true
+    timestamp: 1636762309.878534
+  - printTime: 0.010605812072753906
+    printerProfile: _default
+    success: true
+    timestamp: 1636762310.1007
+  - printTime: 0.007807016372680664
+    printerProfile: _default
+    success: true
+    timestamp: 1636762427.205873
+  - printTime: 0.01150202751159668
+    printerProfile: _default
+    success: true
+    timestamp: 1636762427.402216
+  - printTime: 0.018792152404785156
+    printerProfile: _default
+    success: true
+    timestamp: 1636762550.497222
+  - printTime: 0.021326065063476562
+    printerProfile: _default
+    success: true
+    timestamp: 1636762550.813603
+  links: []
+  notes: []
+  statistics:
+    averagePrintTime:
+      _default: 0.010992586612701416
+    lastPrintTime:
+      _default: 0.021326065063476562
+palm-coin_02mm_pla_mk3s_36m.gcode:
+  analysis:
+    dimensions:
+      depth: 134.157
+      height: 6.0
+      width: 151.522
+    estimatedPrintTime: 1625.5179547333382
+    filament:
+      tool0:
+        length: 2430.7672300001304
+        volume: 5.846680361646965
+    printingArea:
+      maxX: 151.522
+      maxY: 131.157
+      maxZ: 6.0
+      minX: 0.0
+      minY: -3.0
+      minZ: 0.0
+  hash: 23e4afae3082143e041995d6b019038694617995
   links: []
   notes: []

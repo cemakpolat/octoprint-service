@@ -1,41 +1,16 @@
-
 import docker_interface
 import logging
 
 import threading
 import time
-import requests
+
 import strategy
+import util
+import printer_rest as pr
 
 assets_in_printing_list = []
 observer_running = True
-
-
-def get_status_of_printer(printer):
-    """
-    This function retrieves the data from the given ip and port number. IP is currently not used.
-    :param printer:
-    :return:
-    """
-    port = {"port": printer["port"]}
-    r = requests.get('http://localhost:8080/printer/status', params=port)
-    return r.json()
-
-
-def print_product(printer, product):
-    port = {"port": printer["port"],"product":product}
-    r = requests.get('http://localhost:8080/printer/print', params=port)
-    return r.json()
-
-
-def is_printer_free(printer):
-    response = get_status_of_printer(printer)
-    if response["content"] == "OPERATIONAL" or response["content"] == "READY" or response["content"] == "CONNECTED" :
-        return True
-    else:
-        print("Printer cannot be selected since it is in the mode "+response["content"])
-
-    return False
+printer_status_list = []
 
 
 def add_to_asset_list(products):
@@ -46,15 +21,15 @@ def add_to_asset_list(products):
     4. choose randomly one of the printers
     5. future task: based on the printer features, take different decisions.
     """
+    global assets_in_printing_list
     if len(products) > 0:
         for product in products:
-
             item = {
                 "name": product,
                 "assignedPrinterName": "",
-                "status": "waiting"
+                "status": "waiting",
+                "started": None
             }
-            print("added object:", item)
             assets_in_printing_list.append(item)
         return True
     else:
@@ -62,15 +37,33 @@ def add_to_asset_list(products):
     return False
 
 
-def assign_printer(products, printers):
-    for product in products:
-        if len(printers) > 0 and product["status"] == "waiting":
-            sprinter = strategy.select_randomly(printers)
+def remove(obj, printers):
+    for item in printers:
+        if item["name"] == obj["name"]:
+            printers.remove(item)
+            print("{item} is removed".format(item=item["name"]))
 
-            product["assignedPrinterName"] = sprinter["name"]
-            product["status"] = "printing"
-            print_product(sprinter,product["name"])
-            printers.remove(sprinter)
+
+def check_printer_initiation_duration(starttime):
+    """
+     Wait 60 seconds for printing initiation, if it is more than this time, this means the printing is already started
+    """
+    difference = util.time_difference_in_sec(util.get_current_time(), starttime)
+    if difference > 60:
+        return True
+
+
+def assign_printer(printers):
+    for index in range(len(assets_in_printing_list)):
+        if len(printers) > 0 and assets_in_printing_list[index]["status"] == "waiting":
+            sprinter = strategy.select_randomly(printers)
+            assets_in_printing_list[index]["assignedPrinterName"] = sprinter["name"]
+            assets_in_printing_list[index]["status"] = "printing"
+            assets_in_printing_list[index]["started"] = util.get_current_time()
+            pr.print_product(sprinter, assets_in_printing_list[index]["name"])
+            time.sleep(5)
+            # printer_status_list.append({"name": sprinter["name"], "product": assets_in_printing_list[index]["name"]})
+            remove(sprinter, printers)
             print("printer is selected", sprinter)
 
 
@@ -80,48 +73,53 @@ class PrinterObserver(threading.Thread):
                  args=(), kwargs=None):
         threading.Thread.__init__(self, group=group, target=target, name=name)
         self.args = args
+
         self.kwargs = kwargs
         return
 
     def run(self):
         # estimated printing duration is not involved in the system.
+        global assets_in_printing_list
+
         while observer_running:
             print("observer is running")
-            # global assets_in_printing_list
-            print(assets_in_printing_list)
+
+            print("current asset list:", assets_in_printing_list)
             if len(assets_in_printing_list) > 0:
                 printers = docker_interface.get_containers_details("octoprint")
 
                 non_occupied_printers = []
 
                 for printer in printers:
-                    if is_printer_free(printer):
-                        print("selected printer", printer)
+                    if pr.is_printer_free(printer):
                         non_occupied_printers.append(printer)
 
                 if len(non_occupied_printers) > 0:
-                    assign_printer(assets_in_printing_list, non_occupied_printers)
+                    # filter the completed works
+                    for printer in non_occupied_printers:
+                        for item in assets_in_printing_list:
+                            if item["assignedPrinterName"] == printer["name"] and item["status"] == "printing" and \
+                                    check_printer_initiation_duration(item["started"]):
+                                assets_in_printing_list.remove(item)
+                                # remove item from the printer
+                                #delete_product(printer, item) #
 
-                # filter the completed works
-                for printer in non_occupied_printers:
-                    for item in assets_in_printing_list:
-                        if item["assignedPrinterName"] == printer["name"]:
-                            assets_in_printing_list.remove(item)
+                    assign_printer(non_occupied_printers)
 
                 else:
-                    print("all printers are occupied...")
-            else:
-                print("asset list is empty!")
-                time.sleep(5)
+                    print("All printers are occupied...")
 
-            time.sleep(5)
+            else:
+                print("Asset list is empty!")
+
+            time.sleep(20)
         logging.info("Printer observer is stopping...")
         return
 
 
 def start_observer():
-    t = PrinterObserver(args=(), kwargs={'test':'data'})
-    t.start()
+
+    PrinterObserver(args=(), kwargs={'test': 'data'}).start()
     logging.info("Printer observer is started..")
 
 
@@ -138,13 +136,14 @@ class PrinterOwner:
     The printer owners would have different devices, quality, delivery time as well as cost
     The decision will be based on those parameters.
     """
+
     def __init__(self):
         self.owner = "name"
         self.quality = "resolution"
         self.cost = "0-100"
         self.deliveryTime = "3"
         self.possibleEnergyConsumption = "100"
-        self.climaEffect = "0" # due to the consumed energy!
+        self.climateEffect = "0"  # due to the consumed energy!
         self.device = "x-marke"
 
 
@@ -153,3 +152,9 @@ class ProductModel:
         self.name = "name"
         self.creator = "Beagle Bone"
         self.complexity = "100"  # 0-100
+
+
+class Printer:
+    def __init__(self):
+        self.name = "printername"
+        self.features = ""

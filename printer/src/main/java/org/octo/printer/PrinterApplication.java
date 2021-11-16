@@ -12,11 +12,10 @@ import org.springframework.core.env.Environment;
 public class PrinterApplication {
 
 	public static void main(String[] args) {
-		ApplicationContext c = SpringApplication.run(PrinterApplication.class, args);PrinterApplication p = new PrinterApplication();
-		ConfigProperties  con = c.getBean(ConfigProperties.class);
-		System.out.println(con.getUserBucketPath());
-
-		// set
-		OctoPrintInterface.modelsFolder = con.getUserBucketPath();
+		ApplicationContext c = SpringApplication.run(PrinterApplication.class, args);
+//		ConfigProperties  con = c.getBean(ConfigProperties.class);
+//		System.out.println(con.getUserBucketPath());
+//
+//		OctoPrintInterface.modelsFolder = con.getUserBucketPath();
 	}
 }

@@ -2,14 +2,14 @@ import subprocess, logging, socket, json, os
 import util
 import docker
 import time
+import os
 
 
-# start all printers with a number
+def is_docker_active():
+    pass
+
+
 def start_printers(number):
-    import os
-    # data = {}
-    # data['printer-dockers'] = []
-
     plist = util.get_available_port_numbers(number)
     print(plist)
     for i in range(len(plist)):
@@ -26,7 +26,7 @@ def start_printers(number):
 
 # stop all printers dockers
 def stop_printers():
-    containers = list_containers("octoprint")
+    containers = list_running_containers("octoprint")
     for item in containers:
         stop_container(item)
 
@@ -56,9 +56,8 @@ def get_docker_client():
 
 # get all container status
 def get_all_container_stats():
-
     stats = []
-    clist = list_containers("octoprint")
+    clist = list_running_containers("octoprint")
     for cnt in clist:
         stats.append(gather_container_stats(cnt))
     return stats
@@ -66,7 +65,6 @@ def get_all_container_stats():
 
 # get docker statistics
 def gather_container_stats(container_name):
-
     """
     Used to gather the execution stats for a Docker Container by its ID
     name, cpu, mem usage, net io,
@@ -83,10 +81,11 @@ def gather_container_stats(container_name):
         """
         
         """
-        res = {"name":res["name"],"cpu":res["cpu_stats"]["cpu_usage"]["total_usage"],"mem":res["memory_stats"]["usage"],"net":{
-            "ingress":res["networks"]["eth0"]["rx_bytes"],
-            "egress":res["networks"]["eth0"]["tx_bytes"]
-        }}
+        res = {"name": res["name"], "cpu": res["cpu_stats"]["cpu_usage"]["total_usage"],
+               "mem": res["memory_stats"]["usage"], "net": {
+                "ingress": res["networks"]["eth0"]["rx_bytes"],
+                "egress": res["networks"]["eth0"]["tx_bytes"]
+            }}
     else:
         logging.warning("Container ID does not exist!")
         res = "{}"
@@ -104,21 +103,20 @@ def get_container_id(cname):
 
 
 # list all running containers
-def list_running_containers():
+def list_all_running_containers():
     client = get_docker_client()
     containers = client.containers.list()
 
     result = []
     for container in containers:
-        print(container)
-        # if PACKAGE_IMAGE_NAME in container.image.tags and str(container.status) == 'running':
         if str(container.status) == 'running':
             result.append(container.name)
 
     return result
 
+
 # list all containers with the given name
-def list_containers(search_tag):
+def list_running_containers(search_tag):
     client = get_docker_client()
     containers = client.containers.list()
     result = []
@@ -130,13 +128,13 @@ def list_containers(search_tag):
 
 def get_containers_details(search_tag):
     """
-        {
-    [{
-    name:"dockertests-name",
-    "ip":"ip",
-    "port":"port",
-    "status":"running"
-    }]
+    {
+        [{
+            name:"dockertests-name",
+            "ip":"ip",
+            "port":"port",
+            "status":"running"
+        }]
     }
 
     :param search_tag:
@@ -146,9 +144,11 @@ def get_containers_details(search_tag):
     containers = client.containers.list()
     result = []
     for container in containers:
-        #print(container.attrs)
         if search_tag in container.name:
-            result.append({"name":container.name,"port":container.attrs['HostConfig']['PortBindings']['5000/tcp'][0]['HostPort'], "status":container.status,"ip":container.attrs['HostConfig']['PortBindings']['5000/tcp'][0]['HostIp']})
+            result.append({"name": container.name,
+                           "port": container.attrs['HostConfig']['PortBindings']['5000/tcp'][0]['HostPort'],
+                           "status": container.status,
+                           "ip": container.attrs['HostConfig']['PortBindings']['5000/tcp'][0]['HostIp']})
     return result
 
 

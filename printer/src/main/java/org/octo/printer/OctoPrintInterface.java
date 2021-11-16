@@ -58,8 +58,7 @@ public class OctoPrintInterface {
         this.apiKey = apiKey;
         this.baseUrl = url;
         this.initiate();
-//        System.out.println(this.baseUrl + " " + this.apiKey);
-        print(modelsFolder);
+//        System.out.println(this.baseUrl + " " + this.apiKey);s
     }
 
     public void print(String str) {
@@ -188,7 +187,7 @@ public class OctoPrintInterface {
 
     public void transferFileToPrinter(String fileName) {
         if (new PrinterCommand(this.octoprintInstance).getCurrentState().isConnected()) {
-            new FileCommand(this.octoprintInstance).deleteFile("palm-coin_02mm_pla_mk3s_36m.gcode");
+            //new FileCommand(this.octoprintInstance).deleteFile("palm-coin_02mm_pla_mk3s_36m.gcode");
             new FileCommand(this.octoprintInstance).uploadFile(fileName);
         }
     }

@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RestController
 public class PrinterController {
-    @Value("${app.title}")
-    private String appTitle;
+
 
     private final AtomicLong counter = new AtomicLong();
     private String apiKey = "1D8DF67AD9594E81A44830CF33936F55";
@@ -114,14 +113,13 @@ public class PrinterController {
         if (printer.getPrinterCurrentState() == "UNKNOWN" && this.virtualModeEnabled){
             printer.connectWithVirtualPort();
         }
-        // select the printer, printer id and the development id
+
         String status = "";
         System.out.println("model:"+selectedProduct);
         System.out.println(printer.isPrinterConnected());
         selectedProduct = selectedProduct+".gcode";
         if (selectedProduct != null){
             printer.transferFileToPrinter(selectedProduct);
-            printer.printModel(selectedProduct);
             printer.printModel(selectedProduct);
             status = printer.getPrinterCurrentState();
         }

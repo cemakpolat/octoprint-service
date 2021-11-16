@@ -10,7 +10,6 @@ def read_printable_models():
 
 
 def get_printable_models():
-    print(" get models")
     files = os.listdir("../models/")
     flist = []
     for f in files:

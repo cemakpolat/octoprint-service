@@ -1,5 +1,5 @@
 import json, socket
-
+import time
 
 def write_to_file(data):
     with open('dockertests-ports.txt', 'w') as outfile:
@@ -40,3 +40,12 @@ def is_port_free(port):
         result = True
     a_socket.close()
     return result
+
+
+def get_current_time():
+    return time.time()
+
+
+def time_difference_in_sec(later, now):
+    difference = int(later - now)
+    return difference
