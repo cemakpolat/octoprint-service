@@ -38,8 +38,8 @@ import java.util.Map;
 public class OctoPrintInterface {
     private static final Logger LOG = LoggerFactory.getLogger(OctoPrintInterface.class);
     public OctoPrintInstance octoprintInstance = null;
-    public String apiKey = "609671DDA7B84E10B6A6FB17FF7BC59B";
-    public String baseUrl = "http://localhost:5000";
+    public String apiKey = "";
+    public String baseUrl = "";
     public static String modelsFolder = "../models";
     private Long estimatedPrintTime = null;
     private Double estimatedFilamentUsage = null;
@@ -58,7 +58,7 @@ public class OctoPrintInterface {
         this.apiKey = apiKey;
         this.baseUrl = url;
         this.initiate();
-//        System.out.println(this.baseUrl + " " + this.apiKey);s
+//        System.out.println(this.baseUrl + " " + this.apiKey);
     }
 
     public void print(String str) {
@@ -136,7 +136,6 @@ public class OctoPrintInterface {
     }
 
     public void printModel(String modelname) {
-//        System.out.println(this.isPrinterPrinting() +" "+ this.getPrinterCurrentState());
         if ((this.isPrinterConnected() || this.isPrinterReady()) && !this.isPrinterPrinting()) {
             FileCommand fcommand = new FileCommand(this.octoprintInstance);
             List<OctoPrintFileInformation> lists = fcommand.listFiles();

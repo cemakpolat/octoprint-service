@@ -1,7 +1,8 @@
-import logging, json
-from flask import Flask, render_template, request
+import logging, json, os
+from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS, cross_origin
 import docker_interface, util, printer_decision, printable_models
+from werkzeug.utils import secure_filename
 
 logger = logging.getLogger()
 
@@ -114,6 +115,53 @@ def assign_printer():
         logger.warning("container name is not given as a parameter")
 
     return json.dumps({"result": res})
+
+# Assets manager
+
+UPLOAD_FOLDER = './new_models'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.route('/printers/assets/upload', methods=["GET", "POST"])
+def upload_file():
+
+    # check if the post request has the file part
+    if 'files[]' not in request.files:
+        resp = jsonify({'message': 'No file part in the request'})
+        resp.status_code = 400
+        return resp
+
+    files = request.files.getlist('files[]')
+
+    errors = {}
+    success = False
+
+    for file in files:
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            success = True
+        else:
+            errors[file.filename] = 'File type is not allowed'
+
+    if success and errors:
+        errors['message'] = 'File(s) successfully uploaded'
+        resp = jsonify(errors)
+        resp.status_code = 206
+        return resp
+    if success:
+        resp = jsonify({'message': 'Files successfully uploaded'})
+        resp.status_code = 201
+        return resp
+    else:
+        resp = jsonify(errors)
+        resp.status_code = 400
+        return resp
 
 
 @app.route('/printers/assets', methods=["GET", "POST"])
