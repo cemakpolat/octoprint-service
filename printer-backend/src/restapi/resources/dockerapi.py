@@ -4,7 +4,7 @@
 """
 
 import json, logging
-from src import docker_manager
+import docker_manager
 from flask import Blueprint, request
 
 dockerbp = Blueprint('dockerapi', __name__)

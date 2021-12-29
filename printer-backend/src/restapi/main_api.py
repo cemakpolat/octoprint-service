@@ -3,7 +3,7 @@
 @created by cemakpolat at 2020-07-24
 """
 from flask import Flask
-from src.restapi.resources import assetsapi, dockerapi, printingapi, userapi
+from restapi.resources import assetsapi, dockerapi, printingapi, userapi
 from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)

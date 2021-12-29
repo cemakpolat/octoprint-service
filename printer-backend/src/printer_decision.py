@@ -3,7 +3,7 @@ import logging
 import threading
 import time
 
-from src import strategy, octoprint_restapi as pr, util, docker_manager
+import strategy, octoprint_restapi as pr, util, docker_manager
 
 assets_in_printing_list = []
 observer_running = True

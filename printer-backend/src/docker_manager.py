@@ -1,5 +1,5 @@
 import logging
-from src import util
+import util
 import docker
 import time
 import os

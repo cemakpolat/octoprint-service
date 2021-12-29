@@ -6,7 +6,7 @@
 import os, json
 from flask import jsonify, Blueprint, request
 from werkzeug.utils import secure_filename
-from src import assets_manager
+import assets_manager
 
 assetsapi = Blueprint('assetsapi', __name__)
 

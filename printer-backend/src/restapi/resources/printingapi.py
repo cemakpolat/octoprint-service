@@ -4,7 +4,7 @@
 """
 import json, logging
 from flask import jsonify, Blueprint, request
-from src import printer_decision
+import printer_decision
 
 printingapi = Blueprint('printingapi', __name__)
 
