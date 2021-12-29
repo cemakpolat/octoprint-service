@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Printing Office</title>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.4/themes/flick/jquery-ui.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">s
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="./dist/css/ss-menu.css">
+</head>
+
+<body>
+
+    <nav class="ss-menu ">
+        <ul>
+            <li>
+                <a class="section activated" href="#1" id="setup-environment">
+                    <i class="fa fa-sliders"></i> Printer Simulation Setup</a>
+            </li>
+            <li>
+                <a class="section deactivated" href="#2" id="product-models">
+                    <i class="fa fa-shopping-basket"></i> 3D Models & Printing </a>
+            </li>
+            <li>
+                <a class="section deactivated" id="printing-monitoring" href="#3">
+                    <!--<span class="ss-badge">6</span> -->
+                    <i class="fa fa-print"></i>Printing Statuses</a>
+            </li>
+            <li>
+                <a class="section deactivated" id="product-monitoring" href="#4">
+                    <!--<span class="ss-badge">6</span> -->
+                    <i class="fa fa-cubes"></i>Ordered Product Statuses</a>
+            </li>
+            <li><a class="section deactivated" id="user-profile" href="#1"><i class="fa fa-user-circle-o"></i> User Profile</a></li>
+            <li><a class="section deactivated" id="info" href="#1"><i class="fa fa-info-circle"></i> Info</a></li>
+
+
+        </ul>
+    </nav>
+    <div style="margin-left:60px">
+        <div id="setup-environment-view" class="content">
+            <div class="container-fluid" style="margin: 0px">
+                <div class="row" style="margin:15px;padding: 0px">
+                    <div class="col-md-2 col-sm-6">
+                        <div class="wrimagecard wrimagecard-topimage">
+                            <a href="#">
+                                <div class="wrimagecard-topimage_header" style="background-color:rgba(187, 120, 36, 0.1)" style="width: 100%">
+                                    <div style="width: 100%; margin: 0 auto;">
+                                        <img width="90%" src="./dist/img/printer2.png" />
+                                    </div>
+
+                                </div>
+                                <div class="wrimagecard-topimage_title">
+                                    <h4>Printer
+                                    </h4>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-10 col-sm-6">
+                        <div class="input-group mb-12">
+                            <input id="dockerCount" type="text" class="form-control" placeholder="Docker Count" aria-label="Docker Count" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button" id="startDockers">Start Printers</button>
+                                <button class="btn btn-outline-secondary" type="button" id="stopDockers">Stop Printers</button>
+<!--
+                                <button class="btn btn-outline-secondary" type="button" id="stopDataStreaming">Stop Data Streaming</button>
+                                <button class="btn btn-outline-secondary" type="button" id="startDataStreaming">Start Data Streaming Printers</button>
+-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-hover table-dark" id="docker-status-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Printer Name</th>
+                            <th scope="col">Port 1</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Control</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <div id="product-models-view" class="content">
+            <div class="container-fluid">
+                <div id="assetslist" class="row">
+                </div>
+                <div style="background-color: azure; padding:4px;height:60px;border-radius:10px">
+                    <p id="msg"></p>
+                    <div class="col-md-11 col-sm-10 col-xs-9">
+                        <input class="form-control" type="file" id="multiFiles" name="files[]" multiple="multiple">
+                    </div>
+                    <div class="col-md-1 col-sm-2 col-xs-3">
+                        <button id="upload" type="button" class="btn btn-primary" style="float:right;width: 140px;height: 35px;background-color: darkcyan;font-size:1.2em;z-index:11">Upload</button>
+                    </div>
+                </div>
+                <button id="print-models-btn" type="button" class="btn btn-primary" style="position: fixed;right: 30px;bottom:50px; width: 160px;height: 35px;background-color: darkcyan;font-size:1.2em;z-index:10">
+                    Print 3D Model
+                </button>
+
+            </div>
+        </div>
+
+        <div id="product-monitoring-view" class="content">
+            <div class="container-fluid" style="margin-top: 10px;margin-right: 10px">
+                <div class="row" style="margin-bottom: 20px">
+                    <h3>Current Status of Ordered Products</h3>
+                </div>
+
+                <div class="row">
+                    <table class="table table-hover table-dark" id="product-status-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Starting Time</th>
+                                <th scope="col">Printing %</th>
+                                <th scope="col">Assigned Printer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="printing-monitoring-view" class="content">
+            <div class="container-fluid" style="margin-top: 20px;">
+                <div id="allprinters"> </div>
+            </div>
+        </div>
+
+        <div id="user-profile-view" class="content">
+            <div class="container-fluid" style="margin-top: 10px;margin-right: 10px">
+                <div class="row">
+                    <h3>User Preferences</h3></div>
+                <div class="row" style="margin-top: 30px;"></div>
+                <div class="row">
+                    <div class="slider">
+                        <div class="left-color"></div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 30px; margin-left: 10px; font-size: 16px">
+                    <div style="color:#ED553B;float:left;"><span>Total Production Cost: &nbsp;</span><span id="profile_eco"></span>%</div>
+                    <div style="color:#20639B;float:left;margin-left:30px"><span>Product Arrival Time:&nbsp;</span><span id="profile_time"></span>%</div>
+                    <div style="color:#3CAEA3;float:left;margin-left:30px"><span>Eco Friendly Production &amp; Delivery:&nbsp;</span><span id="profile_cost"></span>%</div>
+                </div>
+
+            </div>
+        </div>
+        <div id="info-view" class="content">
+        </div>
+    </div>
+
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="./dist/js/ui-components/jquery.ss.menu.js"></script>
+    
+    <script type="text/javascript" src="./dist/js/common.js"></script>
+    <script type="text/javascript" src="./dist/js/compgenerator.js"></script>
+    <script type="text/javascript" src="./dist/js/dockermanager.js"></script>
+    <script type="text/javascript" src="./dist/js/productmanager.js"></script>
+    <script type="text/javascript" src="./dist/js/printingmanager.js"></script>
+    <script type="text/javascript" src="dist/js/productMonitoring.js"></script>
+    <script type="text/javascript" src="./dist/js/userprofile.js"></script>
+    <script type="text/javascript" src="./dist/js/ui-components/slider.js"></script>
+    <script type="text/javascript" src="./dist/js/main.js"></script>
+
+    
+</body>
+
+</html>

@@ -1,1 +1,16 @@
-{}
+/:
+- _count: 7
+  _timestamp: 1640648621.891725
+  base_url: http://localhost:50000/
+  path: /
+  query_string: l10n=en
+- _count: 1
+  _timestamp: 1640306515.979073
+  base_url: http://localhost:50002/
+  path: /
+  query_string: l10n=en
+- _count: 1
+  _timestamp: 1640290846.347094
+  base_url: http://localhost:50001/
+  path: /
+  query_string: l10n=en

@@ -28,11 +28,38 @@
   - printerProfile: _default
     success: false
     timestamp: 1636765113.461888
+  - printerProfile: _default
+    success: false
+    timestamp: 1640290877.58007
+  - printTime: 1814.4962170124054
+    printerProfile: _default
+    success: true
+    timestamp: 1640305706.936803
+  - printTime: 1839.2891747951508
+    printerProfile: _default
+    success: true
+    timestamp: 1640309026.459722
+  - printTime: 1831.62694978714
+    printerProfile: _default
+    success: true
+    timestamp: 1640311217.827108
+  - printerProfile: _default
+    success: false
+    timestamp: 1640559580.187317
+  - printerProfile: _default
+    success: false
+    timestamp: 1640559609.561513
+  - printerProfile: _default
+    success: false
+    timestamp: 1640566490.34744
+  - printerProfile: _default
+    success: false
+    timestamp: 1640574488.783527
   statistics:
     averagePrintTime:
-      _default: 1819.1503410339355
+      _default: 1826.140670657158
     lastPrintTime:
-      _default: 1819.1503410339355
+      _default: 1831.62694978714
 3DBenchy_0.15mm_PLA_MK3S_2h.gcode:
   analysis:
     dimensions:
@@ -56,9 +83,21 @@
   - printerProfile: _default
     success: false
     timestamp: 1636762677.705622
+  - printTime: 3485.081335067749
+    printerProfile: _default
+    success: true
+    timestamp: 1640314709.911105
+  - printerProfile: _default
+    success: false
+    timestamp: 1640566666.902465
+  - printerProfile: _default
+    success: false
+    timestamp: 1640567309.97488
   statistics:
-    averagePrintTime: {}
-    lastPrintTime: {}
+    averagePrintTime:
+      _default: 3485.081335067749
+    lastPrintTime:
+      _default: 3485.081335067749
 9_snowflakes.gcode:
   analysis:
     dimensions:
@@ -83,6 +122,9 @@
     printerProfile: _default
     success: true
     timestamp: 1636766725.258444
+  - printerProfile: _default
+    success: false
+    timestamp: 1640559628.958481
   statistics:
     averagePrintTime:
       _default: 1311.103912115097
@@ -213,13 +255,17 @@ model2.gcode:
     printerProfile: _default
     success: true
     timestamp: 1636762550.813603
+  - printTime: 0.018040895462036133
+    printerProfile: _default
+    success: true
+    timestamp: 1640306735.772274
   links: []
   notes: []
   statistics:
     averagePrintTime:
-      _default: 0.010992586612701416
+      _default: 0.011407193015603459
     lastPrintTime:
-      _default: 0.021326065063476562
+      _default: 0.018040895462036133
 palm-coin_02mm_pla_mk3s_36m.gcode:
   analysis:
     dimensions:
