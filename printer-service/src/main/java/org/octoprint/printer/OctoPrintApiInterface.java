@@ -1,4 +1,4 @@
-package org.octo.printer;
+package org.octoprint.printer;
 import org.json.simple.JSONObject;
 
 import org.octoprint.api.*;
@@ -27,11 +27,12 @@ import java.util.Map;
  *
  */
 
-public class OctoPrintInterface {
-    private static final Logger LOG = LoggerFactory.getLogger(OctoPrintInterface.class);
+public class OctoPrintApiInterface {
+
+    private final Logger logger = LoggerFactory.getLogger(OctoPrintApiInterface.class);
     public OctoPrintInstance octoprintInstance = null;
-    public String apiKey = "";
-    public String baseUrl = "";
+    public String apiKey;
+    public String baseUrl;
     public static String printableFiles = "../models";
     private Long estimatedPrintTime = null;
     private Double estimatedFilamentUsage = null;
@@ -39,24 +40,20 @@ public class OctoPrintInterface {
     private Double progress = null;
     private String modelName = null;
 
-    public OctoPrintInterface(String url, int port, String apiKey) {
+    public OctoPrintApiInterface(String url, int port, String apiKey) {
         this.apiKey = apiKey;
         this.baseUrl = url + ":" + port;
         this.initiate();
-
     }
 
-    public OctoPrintInterface(String url, String apiKey) {
+    public OctoPrintApiInterface(String url, String apiKey) {
         this.apiKey = apiKey;
         this.baseUrl = url;
         this.initiate();
     }
 
-    public void print(String str) {
-        System.out.println(str);
-    }
-
     public void initiate() {
+        logger.debug("The models folder is "+ OctoPrintApiInterface.printableFiles);
         if (this.baseUrl != null || this.apiKey != null) {
             try {
                 final URL url = new URL(this.baseUrl);
@@ -65,13 +62,13 @@ public class OctoPrintInterface {
                 try {
                     final Map<String, String> flatSettingsMap = settingsCommand.getFlatSettingsMap();
                     if (flatSettingsMap == null) {
-                        LOG.error("Could not retrieve settings from octoprint instance.");
+                        logger.error("Could not retrieve settings from octoprint instance.");
                     }
                 } catch (final OctoPrintAPIException e) {
-                    LOG.error("Could not retrieve settings from octoprint instance.", e);
+                    logger.error("Could not retrieve settings from octoprint instance.", e);
                 }
             } catch (final MalformedURLException e) {
-                LOG.error("Invalid baseUrl provided!", e);
+                logger.error("Invalid baseUrl provided!", e);
             }
         } else {
             this.octoprintInstance = null;
@@ -134,10 +131,9 @@ public class OctoPrintInterface {
                 if (file.getName().equalsIgnoreCase(modelname)) {
                     fcommand.printFile(modelname);
                 }
-                System.out.println(""+file.getName());
             }
         } else {
-            print("Either printer is not connected or is already printing");
+            logger.info("Either printer is not connected or is already printing");
         }
     }
 
@@ -175,32 +171,30 @@ public class OctoPrintInterface {
 
     public void transferFileToPrinter(String fileName) {
         if (new PrinterCommand(this.octoprintInstance).getCurrentState().isConnected()) {
-            new FileCommand(this.octoprintInstance).uploadFile(OctoPrintInterface.printableFiles, fileName);
+            new FileCommand(this.octoprintInstance).uploadFile(OctoPrintApiInterface.printableFiles, fileName);
         }
     }
 
     public String getPrinterCurrentState() {
 
         if (this.isPrinterPrinting())
-            return "PRINTING";
+            return Constants.PrinterState.PRINTING;
         else if (this.isPrinterPaused())
-            return "PAUSED";
+            return Constants.PrinterState.PAUSED;
         else if (this.isPrinterOperational())
-            return "OPERATIONAL";
+            return Constants.PrinterState.OPERATIONAL;
         else if (this.isPrinterReady())
-            return "READY";
+            return Constants.PrinterState.READY;
         else if (this.isPrinterConnected())
-            return "CONNECTED";
-        return "UNKNOWN";
+            return Constants.PrinterState.CONNECTED;
+        return Constants.PrinterState.UNKNOWN;
     }
 
     public boolean isPrinterConnected() {
         PrinterCommand printerCommand = new PrinterCommand(this.octoprintInstance);
         PrinterState currentState = printerCommand.getCurrentState();
         if (currentState != null) {
-            if (currentState.isConnected()) {
-                return true;
-            }
+            return currentState.isConnected();
         }
         return false;
     }
@@ -208,19 +202,14 @@ public class OctoPrintInterface {
     public boolean isPrinterReady() {
         PrinterCommand printerCommand = new PrinterCommand(this.octoprintInstance);
         PrinterState currentState = printerCommand.getCurrentState();
-        if (currentState.isReady()) {
-            return true;
-        }
-        return false;
+        return currentState.isReady();
     }
 
     public boolean isPrinterPaused() {
         PrinterCommand printerCommand = new PrinterCommand(this.octoprintInstance);
         PrinterState currentState = printerCommand.getCurrentState();
         if (currentState != null) {
-            if (currentState.isPaused()) {
-                return true;
-            }
+            return currentState.isPaused();
         }
         return false;
     }
@@ -229,9 +218,7 @@ public class OctoPrintInterface {
         PrinterCommand printerCommand = new PrinterCommand(this.octoprintInstance);
         PrinterState currentState = printerCommand.getCurrentState();
         if (currentState != null) {
-            if (currentState.isPrinting()) {
-                return true;
-            }
+            return currentState.isPrinting();
         }
         return false;
     }
@@ -240,13 +227,10 @@ public class OctoPrintInterface {
         final PrinterCommand printerCommand = new PrinterCommand(this.octoprintInstance);
         final PrinterState currentState = printerCommand.getCurrentState();
         if (currentState != null) {
-            if (currentState.isOperational()) {
-                return true;
-            }
+            return currentState.isOperational();
         }
         return false;
     }
-
 
     public boolean getlatestJobStatus() {
         if (octoprintInstance == null) {
@@ -256,7 +240,7 @@ public class OctoPrintInterface {
 
         final OctoPrintJob currentJob = jobCommand.getJobDetails();
         if (currentJob == null) {
-            LOG.error("Failed to retrieve print job information from octoprint url '{}'.", this.baseUrl);
+            logger.error("Failed to retrieve print job information from octoprint url '{}'.", this.baseUrl);
             return false;
         }
 
@@ -345,7 +329,7 @@ public class OctoPrintInterface {
         final JobCommand jobCommand = new JobCommand(octoprintInstance);
 
         jobCommand.updateJob(state);
-        LOG.debug("Executed job command: {}", state);
+        logger.debug("Executed job command: {}", state);
     }
 
     void updateApiKey(final String key) {
@@ -373,7 +357,6 @@ public class OctoPrintInterface {
     }
 
     public void moveAxesRelativeToCurrentPosition(Double x, Double y, Double z) throws InterruptedException {
-        // TODO Auto-generated method stub
         PrinterCommand printer = new PrinterCommand(this.octoprintInstance);
 
         if (printer.getCurrentState().isReady() && printer.getCurrentState().isOperational()) {
@@ -390,15 +373,15 @@ public class OctoPrintInterface {
 
         Map<String, String> results = new HashMap<String, String>();
         this.getlatestJobStatus();
-        results.put(Constants.status, this.getPrinterCurrentState());
-        results.put(Constants.bedTemperature, this.getBedTemperature().toString());
-        results.put(Constants.extruderTemperature, this.getExtruderTemp().toString());
+        results.put(Constants.PrinterMessageTypes.status, this.getPrinterCurrentState());
+        results.put(Constants.PrinterMessageTypes.bedTemperature, this.getBedTemperature().toString());
+        results.put(Constants.PrinterMessageTypes.extruderTemperature, this.getExtruderTemp().toString());
         if (this.isPrinterPrinting()) {
-            results.put(Constants.estimatedFilamentUsage, this.getEstimatedFilamentUsage().toString());
-            results.put(Constants.estimatedPrintTime, this.getEstimatedPrintTime().toString());
-            results.put(Constants.progress, this.getProgress().toString());
+            results.put(Constants.PrinterMessageTypes.estimatedFilamentUsage, this.getEstimatedFilamentUsage().toString());
+            results.put(Constants.PrinterMessageTypes.estimatedPrintTime, this.getEstimatedPrintTime().toString());
+            results.put(Constants.PrinterMessageTypes.progress, this.getProgress().toString());
         }
-        LOG.info(results.toString());
+        logger.debug(results.toString());
         JSONObject json =  new JSONObject(results);
         return json;
     }

@@ -1,63 +1,66 @@
-package org.octo.printer;
+package org.octoprint.printer;
 
 /**
  * @author cemakpolat
  */
 
-import java.util.concurrent.atomic.AtomicLong;
-import org.octo.printer.models.PrinterStatus;
-import org.octo.printer.models.Status;
+import org.octoprint.printer.models.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
 public class PrinterController {
 
-    private final AtomicLong counter = new AtomicLong();
+
     public static String apiKey;
     public static String octoprintURL;
-    private OctoPrintInterface printer; //new OctoPrintInterface(octoprintURL,apiKey);
+    private OctoPrintApiInterface printer; //new OctoPrintInterface(octoprintURL,apiKey);
     private final Boolean virtualModeEnabled = true;
+    private final Logger logger = LoggerFactory.getLogger(PrinterController.class);
 
     private PrinterController() {
-        printer = new OctoPrintInterface(octoprintURL, apiKey);
+        printer = new OctoPrintApiInterface(octoprintURL, apiKey);
     }
 
-    private OctoPrintInterface getPrinter(String port) {
-        return new OctoPrintInterface(this.octoprintURL + ":" + port, apiKey);
+    private OctoPrintApiInterface getPrinter(String port) {
+        return new OctoPrintApiInterface(octoprintURL + ":" + port, apiKey);
     }
 
-    private OctoPrintInterface getPrinter(String url, String port) {
-        return new OctoPrintInterface(url + ":" + port, apiKey);
+    private OctoPrintApiInterface getPrinter(String url, String port) {
+        return new OctoPrintApiInterface(url + ":" + port, apiKey);
     }
 
     @GetMapping("/printer/connect")
     public Status enableVirtualPrinter(@RequestParam(value = "port", defaultValue = "") String port) {
 
         printer = getPrinter(port);
-        if (printer.getPrinterCurrentState() == "UNKNOWN" && this.virtualModeEnabled) {
+        if (printer.getPrinterCurrentState().equals(Constants.PrinterState.UNKNOWN) && this.virtualModeEnabled) {
             printer.connectWithVirtualPort();
         }
-        return new Status(String.format(printer.getPrinterCurrentState()));
+        return new Status(printer.getPrinterCurrentState());
     }
 
     @GetMapping("/printer/disconnect")
     public Status disableVirtualPrinter(@RequestParam(value = "port", defaultValue = "") String port) {
 
         printer = getPrinter(port);
-        if (printer.getPrinterCurrentState() == "OPERATIONAL" || printer.getPrinterCurrentState() == "READY" || printer.getPrinterCurrentState() == "CONNECTED") {
+        if (printer.getPrinterCurrentState().equals(Constants.PrinterState.OPERATIONAL) ||
+                printer.getPrinterCurrentState().equals(Constants.PrinterState.READY) ||
+                printer.getPrinterCurrentState().equals(Constants.PrinterState.CONNECTED)) {
             printer.disconnect();
-        } else if (printer.getPrinterCurrentState() == "PRINTING") {
+        } else if (printer.getPrinterCurrentState().equals(Constants.PrinterState.PRINTING)) {
             printer.cancelPrinting();
             printer.disconnect();
         }
-        return new Status(String.format(printer.getPrinterCurrentState()));
+        return new Status(printer.getPrinterCurrentState());
     }
 
     @GetMapping("/printer/status")
     public Status printerStatus(@RequestParam(value = "port", defaultValue = "") String port) {
         printer = getPrinter(port);
-        if (printer.getPrinterCurrentState() == "UNKNOWN" && this.virtualModeEnabled) {
+        if (printer.getPrinterCurrentState().equals(Constants.PrinterState.UNKNOWN) && this.virtualModeEnabled) {
             printer.connectWithVirtualPort();
         }
         return new Status(printer.getPrinterCurrentState());
@@ -67,46 +70,45 @@ public class PrinterController {
     public Status stopPrinting(@RequestParam(value = "port", defaultValue = "") String port) {
 
         printer = getPrinter(port);
-        if (printer.getPrinterCurrentState() == "PRINTING") {
+        if (printer.getPrinterCurrentState().equals(Constants.PrinterState.PRINTING)) {
             printer.cancelPrinting();
         }
-        return new Status(String.format(printer.getPrinterCurrentState()));
+        return new Status(printer.getPrinterCurrentState());
     }
 
     @GetMapping("/printer/pause")
     public Status pausePrinting(@RequestParam(value = "port", defaultValue = "") String port) {
 
         printer = getPrinter(port);
-        if (printer.getPrinterCurrentState() == "PRINTING") {
+        if (printer.getPrinterCurrentState().equals(Constants.PrinterState.PRINTING)) {
             printer.pausePrinting();
         }
-        return new Status(String.format(printer.getPrinterCurrentState()));
+        return new Status(printer.getPrinterCurrentState());
     }
 
     @GetMapping("/printer/resume")
     public Status resumPrinting(@RequestParam(value = "port", defaultValue = "") String port) {
 
         printer = getPrinter(port);
-        if (printer.getPrinterCurrentState() == "PAUSED") {
+        if (printer.getPrinterCurrentState().equals(Constants.PrinterState.PAUSED)) {
             printer.resumePrinting();
         }
-        return new Status(String.format(printer.getPrinterCurrentState()));
+        return new Status(printer.getPrinterCurrentState());
     }
 
     @GetMapping("/printer/print")
     public Status sendSelectedProduct(@RequestParam(value = "product", defaultValue = "") String selectedProduct,
                                       @RequestParam(value = "port", defaultValue = "") String port) {
-        System.out.println("called:" + selectedProduct + " " + port);
+        logger.debug("Selected product name:" + selectedProduct + ", given printer port" + port);
         printer = getPrinter(port);
-        if (printer.getPrinterCurrentState() == "UNKNOWN" && this.virtualModeEnabled) {
+        if (printer.getPrinterCurrentState().equals(Constants.PrinterState.UNKNOWN) && this.virtualModeEnabled) {
             printer.connectWithVirtualPort();
         }
 
         String status = "";
-        System.out.println("model:" + selectedProduct);
-        System.out.println(printer.isPrinterConnected());
-        selectedProduct = selectedProduct + ".gcode";
-        if (selectedProduct != null) {
+        logger.info(printer.isPrinterConnected() + "");
+        if (!selectedProduct.equals("")) {
+            selectedProduct = selectedProduct + ".gcode";
             printer.transferFileToPrinter(selectedProduct);
             printer.printModel(selectedProduct);
             status = printer.getPrinterCurrentState();
@@ -117,7 +119,7 @@ public class PrinterController {
     @GetMapping("/product/status")
     public Status productStatus(@RequestParam(value = "port", defaultValue = "") String port) {
         printer = getPrinter(port);
-        if (printer.getPrinterCurrentState() == "UNKNOWN" && this.virtualModeEnabled) {
+        if (printer.getPrinterCurrentState().equals(Constants.PrinterState.UNKNOWN) && this.virtualModeEnabled) {
             printer.connectWithVirtualPort();
         }
         return new Status(printer.getLatestMeasurements().toString());

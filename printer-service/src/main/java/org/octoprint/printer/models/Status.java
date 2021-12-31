@@ -1,4 +1,4 @@
-package org.octo.printer.models;
+package org.octoprint.printer.models;
 
 /**
  * @author cemakpolat

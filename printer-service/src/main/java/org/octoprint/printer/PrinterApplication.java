@@ -1,5 +1,7 @@
-package org.octo.printer;
+package org.octoprint.printer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -10,11 +12,11 @@ public class PrinterApplication {
 	public static void main(String[] args) {
 
 		ApplicationContext c = SpringApplication.run(PrinterApplication.class, args);
-//		System.out.println("Working Directory = " + System.getProperty("user.dir"));
+		Logger logger = LoggerFactory.getLogger(PrinterApplication.class);
 		ConfigProperties  con = c.getBean(ConfigProperties.class);
+		logger.info(con.getAppTitle()+" starts...");
 
-
-		OctoPrintInterface.printableFiles = con.getPrinterModelsPath();
+		OctoPrintApiInterface.printableFiles = con.getPrinterModelsPath();
 		PrinterController.octoprintURL = con.getPrinterUrl();
 		PrinterController.apiKey = con.getPrinterApiKey();
 	}
