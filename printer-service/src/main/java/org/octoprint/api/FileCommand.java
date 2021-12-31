@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  Implementation of commands found under the File Operations (http://docs.octoprint.org/en/master/api/files.html) endpoint. 
  * 
  * @author rweber, cemakpolat, emregullu
  */
@@ -53,7 +52,6 @@ public class FileCommand extends OctoPrintCommand {
 	
 	/**
 	 * Returns a list of all files (folders and files) from the root. checks local storage only
-	 * 
 	 * @return a list of all files in the root folder, null if an error occurs
 	 */
 	public List<OctoPrintFileInformation> listFiles(){
@@ -120,11 +118,10 @@ public class FileCommand extends OctoPrintCommand {
 	 * @param fileName
 	 * @param uploadLocation
 	 */
-	public void uploadFile(final String fileName, String uploadLocation) {
-//		ClassLoader classLoader = this.getClass().getClassLoader();
+	public void uploadFile(final String filePath, final String fileName, String uploadLocation) {
 		System.out.println("filename:"+fileName +" upload location:"+uploadLocation);
-		File file = new File("../models/"+fileName);
-//		File file = new File(classLoader.getResource(fileName).getFile());
+//		File file = new File("../models/"+fileName);
+		File file = new File(filePath+fileName);
 		System.out.println("file:"+ file.getName());
 
 		FileBody fileBody = new FileBody(file, ContentType.DEFAULT_BINARY);
@@ -147,15 +144,10 @@ public class FileCommand extends OctoPrintCommand {
 		}
 
 	}
-	public void deleteFile(final String fileName, String uploadLocation) {
-		System.out.println("delete filename:"+fileName +" upload location:"+uploadLocation);
-		File file = new File("../models/"+fileName);
-		System.out.println("file:"+ file.getName());
-
+	public void deleteFile( final String fileName, String uploadLocation) {
+//		System.out.println("delete filename:"+fileName +" upload location:"+uploadLocation);
 		HttpDelete request = new HttpDelete(g_comm.getURL()+ "/api/files/" +uploadLocation+"/"+fileName);
-
 		request.setHeader("X-Api-Key", g_comm.getKey());
-
 		HttpClient client = HttpClientBuilder.create().build();
 
 		try {
@@ -163,7 +155,6 @@ public class FileCommand extends OctoPrintCommand {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 
@@ -172,9 +163,9 @@ public class FileCommand extends OctoPrintCommand {
 	 * @param fileNames
 	 * @param uploadLocation
 	 */
-	public void uploadFiles(List<String> fileNames, String uploadLocation) {
+	public void uploadFiles( final String filePath, List<String> fileNames, String uploadLocation) {
 		for(String fileName : fileNames) {
-			uploadFile(fileName, uploadLocation);
+			uploadFile(filePath, fileName, uploadLocation);
 		}
 	}
 
@@ -182,8 +173,8 @@ public class FileCommand extends OctoPrintCommand {
 	 * Upload the file to the local api/files/local folder in the octoprint
 	 * @param fileName
 	 */
-	public void uploadFile(final String fileName) {
-		uploadFile(fileName, "local");
+	public void uploadFile(final String filePath, final String fileName) {
+		uploadFile(filePath, fileName, "local");
 	}
 
 	/**
@@ -198,8 +189,8 @@ public class FileCommand extends OctoPrintCommand {
 	 * upload the list of files into api/files/local located in octoprint
 	 * @param fileNames
 	 */
-	public void uploadFiles(List<String> fileNames) {
-		uploadFiles(fileNames, "local");
+	public void uploadFiles(String filePath, List<String> fileNames) {
+		uploadFiles(filePath, fileNames, "local");
 	}
 	
 	/**

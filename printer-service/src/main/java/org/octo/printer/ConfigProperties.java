@@ -1,27 +1,31 @@
 package org.octo.printer;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
 
 /**
  * @author cemakpolat
  */
+
 @Configuration
 @PropertySource("classpath:application.properties")
 public class ConfigProperties {
 
-    // passing the key which you set in application.properties
-    @Value("${userBucket.path}")
-    private String userBucket;
+    @Value("${app.title}")
+    private String appTitle;
 
-    // getting the value from that key which you set in application.properties
+    @Value("${printer.url}")
+    private String printerUrl;
 
-    public String getUserBucketPath() {
-        return userBucket;
-    }
+    @Value("${printer.apikey}")
+    private String printerApiKey;
+
+    @Value("${printer.models.path}")
+    private String printerModelsPath;
+
+    public String getAppTitle(){return appTitle;}
+    public String getPrinterUrl(){return printerUrl;}
+    public String getPrinterApiKey(){return printerApiKey;}
+    public String getPrinterModelsPath(){return printerModelsPath;}
+
 }

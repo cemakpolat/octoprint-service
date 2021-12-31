@@ -13,19 +13,10 @@ import org.octoprint.api.model.OctoPrintJob.JobProgress;
 import org.octoprint.api.model.PrinterState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 import org.togglz.core.util.Validate;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +32,7 @@ public class OctoPrintInterface {
     public OctoPrintInstance octoprintInstance = null;
     public String apiKey = "";
     public String baseUrl = "";
-    public static String modelsFolder = "../models";
+    public static String printableFiles = "../models";
     private Long estimatedPrintTime = null;
     private Double estimatedFilamentUsage = null;
     private Long remainingPrintTime = null;
@@ -184,7 +175,7 @@ public class OctoPrintInterface {
 
     public void transferFileToPrinter(String fileName) {
         if (new PrinterCommand(this.octoprintInstance).getCurrentState().isConnected()) {
-            new FileCommand(this.octoprintInstance).uploadFile(fileName);
+            new FileCommand(this.octoprintInstance).uploadFile(OctoPrintInterface.printableFiles, fileName);
         }
     }
 
