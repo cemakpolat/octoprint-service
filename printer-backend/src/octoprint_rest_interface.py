@@ -2,7 +2,9 @@
 @author: Cem Akpolat
 @created by cemakpolat at 2021-11-13
 """
-import requests, logging
+import requests
+import util
+logger = util.get_logger()
 
 
 def get_status_of_printer(printer):
@@ -30,11 +32,7 @@ def print_product(printer, product):
 
 def is_printer_free(printer):
     response = get_status_of_printer(printer)
-    print(response)
     if response["content"] == "OPERATIONAL" or response["content"] == "READY" or response["content"] == "CONNECTED":
-
         return True
-    else:
-        logging.debug("Printer cannot be selected since it is in the mode " + response["content"])
-
+    logger.info("Printer cannot be selected since it is in the mode " + response["content"])
     return False

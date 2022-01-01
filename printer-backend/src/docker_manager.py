@@ -5,14 +5,12 @@ import time
 import os
 
 docker_compose_file_path = '../octoprint-docker'
-
-def is_docker_active():
-    pass
+logger = util.get_logger()
 
 
 def start_printers(number):
     plist = util.get_available_port_numbers(number)
-    print(plist)
+    logger.debug("Available port numers are ", plist)
     file_dir = os.path.dirname(os.path.realpath('__file__'))
     for i in range(len(plist)):
         filename = os.path.join(file_dir, docker_compose_file_path+'/docker-compose.yml_backup')
@@ -24,21 +22,25 @@ def start_printers(number):
 
         stream = os.popen('docker-compose -f '+docker_compose_file_path+'/docker-compose.yml -p appv' + str(i) + ' up -d')
         output = stream.read()
-        print(output)
+        logger.debug("Result from the execution of docker-compose is")
+        logger.debug(output)
         time.sleep(2)
 
 
 # stop all printers dockers
 def stop_printers():
     containers = list_running_containers("octoprint")
+    logger.info("All running octopriny container are being stopped...")
     for item in containers:
         stop_container(item)
 
 
 # start a single already composed container
 def start_container(package):
-    if is_container_available(package):
-        print("container is available")
+
+    if not is_container_available(package):
+        logger.info("Docker container, {package}, does not exist, it will first be downloaded".format(package=package))
+
     client = get_docker_client()
     container = client.containers.get(package)
     container.start()
@@ -47,6 +49,7 @@ def start_container(package):
 
 # stop a single container
 def stop_container(printer_id):
+    logger.info("Docker with {id} is stopped".format(id=printer_id))
     client = get_docker_client()
     container = client.containers.get(printer_id)
     container.stop()
@@ -90,8 +93,10 @@ def gather_container_stats(container_name):
                 "ingress": res["networks"]["eth0"]["rx_bytes"],
                 "egress": res["networks"]["eth0"]["tx_bytes"]
             }}
+        logger.debug("Docker stats:")
+        logger.debug(res)
     else:
-        logging.warning("Container ID does not exist!")
+        logger.warning("Container ID does not exist!")
         res = "{}"
     return res
 
@@ -115,7 +120,8 @@ def list_all_running_containers():
     for container in containers:
         if str(container.status) == 'running':
             result.append(container.name)
-
+    logger.debug("List of all running containers")
+    logger.debug(result)
     return result
 
 
@@ -127,6 +133,8 @@ def list_running_containers(search_tag):
     for container in containers:
         if search_tag in container.name:
             result.append(container.name)
+    logger.debug("Running docker container filtered with {tag}".format(tag=search_tag))
+    logger.debug(result)
     return result
 
 
@@ -153,6 +161,9 @@ def get_containers_details(search_tag):
                            "port": container.attrs['HostConfig']['PortBindings']['5000/tcp'][0]['HostPort'],
                            "status": container.status,
                            "ip": container.attrs['HostConfig']['PortBindings']['5000/tcp'][0]['HostIp']})
+
+    logger.debug("Container {container} details:".format(container=search_tag))
+    logger.debug(result)
     return result
 
 
@@ -164,6 +175,7 @@ def is_container_available(package_name):
     for container in containers:
         if container.name == package_name:
             result = True
+    logger.debug("Docker container with package name {name} does not exist".format(name=package_name))
     return result
 
 
@@ -175,6 +187,8 @@ def delete_container(container_docker_id):
     obj_container.stop()
     obj_container.reload()
     if obj_container.status == 'exited':
+        logger.debug("Docker container with id {id} is deleted".format(id=container_docker_id))
         return True
     else:
+        logger.debug("Docker container with id {id} could not be deleted".format(id=container_docker_id))
         return False

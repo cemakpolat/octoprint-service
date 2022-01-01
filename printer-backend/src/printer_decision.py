@@ -1,9 +1,8 @@
-import logging
-
 import threading
 import time
 
-import strategy, octoprint_restapi as pr, util, docker_manager
+import strategy, octoprint_rest_interface as pr, util, docker_manager
+logger = util.get_logger()
 
 assets_in_printing_list = []
 observer_running = True
@@ -24,7 +23,7 @@ def add_to_asset_list(products):
             assets_in_printing_list.append(item)
         return True
     else:
-        logging.warning("No product is added, since the product list empty!")
+        logger.warning("No product is added, since the product list empty!")
     return False
 
 
@@ -32,7 +31,7 @@ def remove(obj, printers):
     for item in printers:
         if item["name"] == obj["name"]:
             printers.remove(item)
-            print("{item} is removed".format(item=item["name"]))
+            logger.info("{item} is removed".format(item=item["name"]))
 
 
 def check_printer_initiation_duration(starttime):
@@ -55,7 +54,7 @@ def assign_printer(printers):
             time.sleep(5)
             # printer_status_list.append({"name": sprinter["name"], "product": assets_in_printing_list[index]["name"]})
             remove(sprinter, printers)
-            print("printer is selected", sprinter)
+            logger.debug("printer is selected", sprinter)
 
 
 class PrinterObserver(threading.Thread):
@@ -73,9 +72,8 @@ class PrinterObserver(threading.Thread):
         global assets_in_printing_list
 
         while observer_running:
-            print("observer is running")
-
-            print("current asset list:", assets_in_printing_list)
+            logger.info("observer is running, current printing list")
+            logger.info(assets_in_printing_list)
             if len(assets_in_printing_list) > 0:
                 printers = docker_manager.get_containers_details("octoprint")
 
@@ -98,23 +96,23 @@ class PrinterObserver(threading.Thread):
                     assign_printer(non_occupied_printers)
 
                 else:
-                    print("All printers are occupied...")
+                    logger.info("All printers are occupied...")
 
             else:
-                print("Asset list is empty!")
+                logger.info("Asset list is empty!")
 
             time.sleep(20)
-        logging.info("Printer observer is stopping...")
+        logger.info("Printer observer is stopping...")
         return
 
 
 def start_observer():
 
     PrinterObserver(args=(), kwargs={'test': 'data'}).start()
-    logging.info("Printer observer is started..")
+    logger.info("Printer observer is started..")
 
 
 def stop_observer():
     global observer_running
     observer_running = False
-    logging.info("Printer observer is stopped ..")
+    logger.info("Printer observer is stopped ..")

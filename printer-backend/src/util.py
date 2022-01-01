@@ -1,5 +1,9 @@
-import json, socket
+import json, socket, logging
 import time
+
+
+def get_logger():
+    return logging.getLogger()
 
 
 def write_to_file(data):

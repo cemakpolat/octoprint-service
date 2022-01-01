@@ -18,7 +18,8 @@ ALLOWED_EXTENSIONS = set(['gcode'])
 @assetsapi.route('/models', methods=["GET", "POST"])
 def get_all_models():
     flist = assets_manager.get_printable_models()
-    return json.dumps({"result": flist})
+    return jsonify({'message': flist})
+    # return json.dumps({"result": flist})
 
 
 def allowed_file(filename):
