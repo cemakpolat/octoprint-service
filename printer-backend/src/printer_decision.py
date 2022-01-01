@@ -11,13 +11,7 @@ printer_status_list = []
 
 
 def add_to_asset_list(products):
-    """
-    1. get all port numbers from docker-interface
-    2. call the java api for each port to see whether the printer is running or not
-    3. create a list of available printers
-    4. choose randomly one of the printers
-    5. future task: based on the printer features, take different decisions.
-    """
+
     global assets_in_printing_list
     if len(products) > 0:
         for product in products:
