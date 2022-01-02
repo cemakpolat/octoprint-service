@@ -133,6 +133,9 @@
   - printerProfile: _default
     success: false
     timestamp: 1640559628.958481
+  - printerProfile: _default
+    success: false
+    timestamp: 1641164370.997396
   statistics:
     averagePrintTime:
       _default: 1311.103912115097

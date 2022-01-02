@@ -1,6 +1,6 @@
 import threading
 import time
-import strategy, octoprint_rest_interface as pr, util, docker_manager
+import strategy_set, printer_observer as pr, util, infrastructure_manager
 
 logger = util.get_logger()
 
@@ -47,7 +47,7 @@ def check_printer_initiation_duration(starttime):
 def assign_printer(printers):
     for index in range(len(assets_in_printing_list)):
         if len(printers) > 0 and assets_in_printing_list[index]["status"] == "waiting":
-            sprinter = strategy.select_randomly(printers)
+            sprinter = strategy_set.select_randomly(printers)
             assets_in_printing_list[index]["assignedPrinterName"] = sprinter["name"]
             assets_in_printing_list[index]["status"] = "printing"
             assets_in_printing_list[index]["started"] = util.get_current_time()
@@ -75,7 +75,7 @@ class PrinterObserver(threading.Thread):
             logger.info("observer is running, current printing list")
             logger.info(assets_in_printing_list)
             if len(assets_in_printing_list) > 0:
-                printers = docker_manager.get_containers_details("octoprint")
+                printers = infrastructure_manager.get_containers_details("octoprint")
 
                 non_occupied_printers = []
 

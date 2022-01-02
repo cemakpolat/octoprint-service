@@ -24,10 +24,10 @@ const printingManager = {
                 'port': dockerPort
             },
         }).done(function (jsondata) {
-            data = jsondata['status']
-            data = JSON.parse(data)
-            const updated_data = printingManager.formPrinterStatusData(data);
-            callback(updated_data);
+            let data = jsondata['status']
+            data = JSON.parse(data);
+            console.log(data);
+            callback( printingManager.formPrinterStatusData(data));
 
         }).fail(function (jqXHR, textStatus, errorThrown) {
             console.log("Error occured with this data", jqXHR, textStatus, errorThrown)
@@ -36,9 +36,9 @@ const printingManager = {
 
     getAllPrinterStatuses: function () {
         this.printerStatuses = []; // clean the printer list
-        // let dockers = dockerManager.activeDockerContainers
-        for (let i = 0; i < dockerManager.activeDockerContainers.length; i++) {
-            printingManager.updatePrinterStatus(dockerManager.activeDockerContainers[i].name, dockerManager.activeDockerContainers[i].port);
+        // let dockers = infrastructureManager.activeDockerContainers
+        for (let i = 0; i < infrastructureManager.activeDockerContainers.length; i++) {
+            printingManager.updatePrinterStatus(infrastructureManager.activeDockerContainers[i].name, infrastructureManager.activeDockerContainers[i].port);
 
         }
     },
@@ -61,7 +61,7 @@ const printingManager = {
     },
 
     formPrinterStatusData: function (data) {
-        var updated_data = {
+        let updated_data = {
             bedTemperature: '0',
             extruderTemperature: '0',
             estimatedFilamentUsage: '0',

@@ -4,7 +4,8 @@ package org.octoprint.printer;
  * @author cemakpolat
  */
 
-import org.octoprint.printer.models.Status;
+import org.octoprint.printer.helpers.PrinterState;
+import org.octoprint.printer.messages.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +21,7 @@ public class PrinterController {
     private final Boolean virtualModeEnabled = true;
     private final Logger logger = LoggerFactory.getLogger(PrinterController.class);
 
-    private PrinterController() {
-//        printer = new OctoPrintApiInterface(octoprintURL, apiKey);
-    }
+    private PrinterController() { }
 
     private OctoPrintApiInterface getPrinter(String port) {
         return new OctoPrintApiInterface(octoprintURL + ":" + port, apiKey);
@@ -36,7 +35,7 @@ public class PrinterController {
     public Status enableVirtualPrinter(@RequestParam(value = "port", defaultValue = "") String port) {
 
         printer = getPrinter(port);
-        if (printer.getPrinterCurrentState().equals(Constants.PrinterState.UNKNOWN) && this.virtualModeEnabled) {
+        if (printer.getPrinterCurrentState().equals(PrinterState.UNKNOWN) && this.virtualModeEnabled) {
             printer.connectWithVirtualPort();
         }
         return new Status(printer.getPrinterCurrentState());
@@ -46,11 +45,11 @@ public class PrinterController {
     public Status disableVirtualPrinter(@RequestParam(value = "port", defaultValue = "") String port) {
 
         printer = getPrinter(port);
-        if (printer.getPrinterCurrentState().equals(Constants.PrinterState.OPERATIONAL) ||
-                printer.getPrinterCurrentState().equals(Constants.PrinterState.READY) ||
-                printer.getPrinterCurrentState().equals(Constants.PrinterState.CONNECTED)) {
+        if (printer.getPrinterCurrentState().equals(PrinterState.OPERATIONAL) ||
+                printer.getPrinterCurrentState().equals(PrinterState.READY) ||
+                printer.getPrinterCurrentState().equals(PrinterState.CONNECTED)) {
             printer.disconnect();
-        } else if (printer.getPrinterCurrentState().equals(Constants.PrinterState.PRINTING)) {
+        } else if (printer.getPrinterCurrentState().equals(PrinterState.PRINTING)) {
             printer.cancelPrinting();
             printer.disconnect();
         }
@@ -60,7 +59,7 @@ public class PrinterController {
     @GetMapping("/printer/status")
     public Status printerStatus(@RequestParam(value = "port", defaultValue = "") String port) {
         printer = getPrinter(port);
-        if (printer.getPrinterCurrentState().equals(Constants.PrinterState.UNKNOWN) && this.virtualModeEnabled) {
+        if (printer.getPrinterCurrentState().equals(PrinterState.UNKNOWN) && this.virtualModeEnabled) {
             printer.connectWithVirtualPort();
         }
         System.out.println("status" + printer.getPrinterCurrentState());
@@ -71,7 +70,7 @@ public class PrinterController {
     public Status stopPrinting(@RequestParam(value = "port", defaultValue = "") String port) {
 
         printer = getPrinter(port);
-        if (printer.getPrinterCurrentState().equals(Constants.PrinterState.PRINTING)) {
+        if (printer.getPrinterCurrentState().equals(PrinterState.PRINTING)) {
             printer.cancelPrinting();
         }
         return new Status(printer.getPrinterCurrentState());
@@ -81,7 +80,7 @@ public class PrinterController {
     public Status pausePrinting(@RequestParam(value = "port", defaultValue = "") String port) {
 
         printer = getPrinter(port);
-        if (printer.getPrinterCurrentState().equals(Constants.PrinterState.PRINTING)) {
+        if (printer.getPrinterCurrentState().equals(PrinterState.PRINTING)) {
             printer.pausePrinting();
         }
         return new Status(printer.getPrinterCurrentState());
@@ -91,7 +90,7 @@ public class PrinterController {
     public Status resumPrinting(@RequestParam(value = "port", defaultValue = "") String port) {
 
         printer = getPrinter(port);
-        if (printer.getPrinterCurrentState().equals(Constants.PrinterState.PAUSED)) {
+        if (printer.getPrinterCurrentState().equals(PrinterState.PAUSED)) {
             printer.resumePrinting();
         }
         return new Status(printer.getPrinterCurrentState());
@@ -102,7 +101,7 @@ public class PrinterController {
                                       @RequestParam(value = "port", defaultValue = "") String port) {
         logger.debug("Selected product name:" + selectedProduct + ", given printer port" + port);
         printer = getPrinter(port);
-        if (printer.getPrinterCurrentState().equals(Constants.PrinterState.UNKNOWN) && this.virtualModeEnabled) {
+        if (printer.getPrinterCurrentState().equals(PrinterState.UNKNOWN) && this.virtualModeEnabled) {
             printer.connectWithVirtualPort();
         }
 
@@ -120,7 +119,7 @@ public class PrinterController {
     @GetMapping("/product/status")
     public Status productStatus(@RequestParam(value = "port", defaultValue = "") String port) {
         printer = getPrinter(port);
-        if (printer.getPrinterCurrentState().equals(Constants.PrinterState.UNKNOWN) && this.virtualModeEnabled) {
+        if (printer.getPrinterCurrentState().equals(PrinterState.UNKNOWN) && this.virtualModeEnabled) {
             printer.connectWithVirtualPort();
         }
         System.out.println("status" + printer.getLatestMeasurements().toString());

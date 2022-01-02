@@ -32,9 +32,9 @@ const productMonitoring = {
         for (let item in productMonitoring.assetsInPrintingQueue) {
             if (productMonitoring.assetsInPrintingQueue[item].status == "printing") {
 
-                for (let i = 0; i < dockerManager.activeDockerContainers.length; i++) {
-                    if (productMonitoring.assetsInPrintingQueue[item].assignedPrinterName == dockerManager.activeDockerContainers[i].name) {
-                        this.updatePercentage(productMonitoring.assetsInPrintingQueue[item], dockerManager.activeDockerContainers[i].port);
+                for (let i = 0; i < infrastructureManager.activeDockerContainers.length; i++) {
+                    if (productMonitoring.assetsInPrintingQueue[item].assignedPrinterName == infrastructureManager.activeDockerContainers[i].name) {
+                        this.updatePercentage(productMonitoring.assetsInPrintingQueue[item], infrastructureManager.activeDockerContainers[i].port);
                         break;
                     }
                 }

@@ -23,14 +23,14 @@ $(document).ready(function () {
         e.preventDefault();
         const dockerid = $(this).parent().parent().find('.docker-id').attr('name');
         console.log(dockerid);
-        dockerManager.stopDocker(dockerid);
+        infrastructureManager.stopDocker(dockerid);
     });
 
     $("#docker-status-table").on("click", '.activate-btn', function (e) {
         e.preventDefault()
         const dockerid = $(this).parent().parent().find('.docker-id').attr('name');
         console.log(dockerid)
-        dockerManager.startDocker(dockerid);
+        infrastructureManager.startDocker(dockerid);
 
     });
     $("#print-models-btn").on("click", function (e) {
@@ -57,7 +57,7 @@ $(document).ready(function () {
         const printernumber = $("#dockerCount").val();
         if (printernumber && $.isNumeric(printernumber)) {
             console.log("dockers will be started")
-            dockerManager.startAllDockers(printernumber)
+            infrastructureManager.startAllDockers(printernumber)
         } else {
             console.log("please provide the number")
         }
@@ -67,7 +67,7 @@ $(document).ready(function () {
         const printernumber = $("#dockerCount").val();
         if (printernumber && $.isNumeric(printernumber)) {
             console.log("dockers will be stopped")
-            dockerManager.stopAllDockers()
+            infrastructureManager.stopAllDockers()
         } else {
             console.log("please provide the number")
         }
@@ -118,7 +118,7 @@ $(document).ready(function () {
     }
 
     function stopDataLoading() {
-        dockerManager.stopDataLoading();
+        infrastructureManager.stopDataLoading();
         productManagement.stopDataLoading();
         printingManager.stopDataLoading();
         productMonitoring.stopDataLoading();
@@ -128,12 +128,12 @@ $(document).ready(function () {
         console.log("The selected item id: " + sectionId)
         stopDataLoading();
         if (sectionId == "setup-environment") {
-            dockerManager.starDataLoading();
+            infrastructureManager.starDataLoading();
         } else if (sectionId == "product-models") { 
             productManagement.getPrintableProductModels();
             productManagement.starDataLoading();
         } else if (sectionId == "printing-monitoring") {
-            dockerManager.starDataLoading();
+            infrastructureManager.starDataLoading();
             printingManager.startDataLoading();
         } else if (sectionId == "product-monitoring") {
             productMonitoring.starDataLoading();

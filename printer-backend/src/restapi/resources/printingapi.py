@@ -4,7 +4,7 @@
 """
 
 from flask import jsonify, Blueprint, request
-import scheduler, util
+import printing_scheduler, util
 
 printingapi = Blueprint('printingapi', __name__)
 
@@ -15,7 +15,7 @@ logger = util.get_logger()
 def assign_printer():
     product_list = request.form.getlist('products[]')
 
-    if product_list and scheduler.add_to_asset_list(product_list):
+    if product_list and printing_scheduler.add_to_asset_list(product_list):
         res = "The {products} are added to the list".format(products=str(product_list))
         return jsonify({"message": res, "type": "success"})
     else:
@@ -26,9 +26,9 @@ def assign_printer():
 
 @printingapi.route('/printers/assets/status', methods=["GET", "POST"])
 def get_ordered_asset_statuses():
-    return jsonify({"message": scheduler.assets_in_printing_list, "type": "success"})
+    return jsonify({"message": printing_scheduler.assets_in_printing_list, "type": "success"})
 
 
 @printingapi.route('/printers/assets', methods=["GET", "POST"])
 def get_assets_in_printing_process():
-    return jsonify({"message": scheduler.assets_in_printing_list, "type": "success"})
+    return jsonify({"message": printing_scheduler.assets_in_printing_list, "type": "success"})

@@ -11,6 +11,7 @@ import org.octoprint.api.model.OctoPrintJob;
 import org.octoprint.api.model.OctoPrintJob.FilamentDetails;
 import org.octoprint.api.model.OctoPrintJob.JobProgress;
 import org.octoprint.api.model.PrinterState;
+import org.octoprint.printer.helpers.PrinterMessageTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.togglz.core.util.Validate;
@@ -178,16 +179,16 @@ public class OctoPrintApiInterface {
     public String getPrinterCurrentState() {
 
         if (this.isPrinterPrinting())
-            return Constants.PrinterState.PRINTING;
+            return org.octoprint.printer.helpers.PrinterState.PRINTING;
         else if (this.isPrinterPaused())
-            return Constants.PrinterState.PAUSED;
+            return org.octoprint.printer.helpers.PrinterState.PAUSED;
         else if (this.isPrinterOperational())
-            return Constants.PrinterState.OPERATIONAL;
+            return org.octoprint.printer.helpers.PrinterState.OPERATIONAL;
         else if (this.isPrinterReady())
-            return Constants.PrinterState.READY;
+            return org.octoprint.printer.helpers.PrinterState.READY;
         else if (this.isPrinterConnected())
-            return Constants.PrinterState.CONNECTED;
-        return Constants.PrinterState.UNKNOWN;
+            return org.octoprint.printer.helpers.PrinterState.CONNECTED;
+        return org.octoprint.printer.helpers.PrinterState.UNKNOWN;
     }
 
     public boolean isPrinterConnected() {
@@ -373,13 +374,13 @@ public class OctoPrintApiInterface {
 
         Map<String, String> results = new HashMap<String, String>();
         this.getlatestJobStatus();
-        results.put(Constants.PrinterMessageTypes.status, this.getPrinterCurrentState());
-        results.put(Constants.PrinterMessageTypes.bedTemperature, this.getBedTemperature().toString());
-        results.put(Constants.PrinterMessageTypes.extruderTemperature, this.getExtruderTemp().toString());
+        results.put(PrinterMessageTypes.status, this.getPrinterCurrentState());
+        results.put(PrinterMessageTypes.bedTemperature, this.getBedTemperature().toString());
+        results.put(PrinterMessageTypes.extruderTemperature, this.getExtruderTemp().toString());
         if (this.isPrinterPrinting()) {
-            results.put(Constants.PrinterMessageTypes.estimatedFilamentUsage, this.getEstimatedFilamentUsage().toString());
-            results.put(Constants.PrinterMessageTypes.estimatedPrintTime, this.getEstimatedPrintTime().toString());
-            results.put(Constants.PrinterMessageTypes.progress, this.getProgress().toString());
+            results.put(PrinterMessageTypes.estimatedFilamentUsage, this.getEstimatedFilamentUsage().toString());
+            results.put(PrinterMessageTypes.estimatedPrintTime, this.getEstimatedPrintTime().toString());
+            results.put(PrinterMessageTypes.progress, this.getProgress().toString());
         }
         logger.debug(results.toString());
         JSONObject json =  new JSONObject(results);

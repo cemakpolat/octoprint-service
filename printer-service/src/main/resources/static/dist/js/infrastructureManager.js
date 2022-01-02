@@ -1,4 +1,4 @@
-const dockerManager = {
+const infrastructureManager = {
     dataLoading: null,
     activeDockerContainers: [],
     port: config.port,
@@ -16,10 +16,10 @@ const dockerManager = {
 
     createDockerList: function (docks) {
         componentGenerator.cleanDockerDetails();
-        dockerManager.activeDockerContainers = []
+        infrastructureManager.activeDockerContainers = []
         for (let i = 0; i < docks.length; i++) {
             componentGenerator.addDockerDetails(i, docks[i]);
-            dockerManager.activeDockerContainers.push({
+            infrastructureManager.activeDockerContainers.push({
                 "port": docks[i].port,
                 "name": docks[i].name
             });
@@ -28,9 +28,9 @@ const dockerManager = {
 
     sendGet: function (params, restUrl, callback) {
 
-        $.get(buildUrl(dockerManager.url, dockerManager.port, restUrl), params,
+        $.get(buildUrl(infrastructureManager.url, infrastructureManager.port, restUrl), params,
             function (returnedData) {
-                data = JSON.parse(returnedData);
+                // data = JSON.parse(returnedData);
                 callback(data);
             }).fail(function () {
             console.log("error");
@@ -41,11 +41,11 @@ const dockerManager = {
         $.ajax({
             crossDomain: true,
             type: "GET",
-            url: buildUrl(dockerManager.url, dockerManager.port, "/dockers/details"),
+            url: buildUrl(infrastructureManager.url, infrastructureManager.port, "/dockers/details"),
             dataType: 'text'
         }).done(function (jsondata) {
             let data = JSON.parse(jsondata);
-            dockerManager.createDockerList(data["message"]);
+            infrastructureManager.createDockerList(data["message"]);
         })
             .fail(function (jsondata) {
                 console.log("Error occured with this data", jsondata)
