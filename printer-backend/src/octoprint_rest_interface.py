@@ -32,7 +32,7 @@ def print_product(printer, product):
 
 def is_printer_free(printer):
     response = get_status_of_printer(printer)
-    if response["content"] == "OPERATIONAL" or response["content"] == "READY" or response["content"] == "CONNECTED":
+    if response["status"] == "OPERATIONAL" or response["status"] == "READY" or response["status"] == "CONNECTED":
         return True
-    logger.info("Printer cannot be selected since it is in the mode " + response["content"])
+    logger.info("Printer cannot be selected since it is in the mode " + response["status"])
     return False

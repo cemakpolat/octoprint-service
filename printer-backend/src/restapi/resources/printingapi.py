@@ -2,9 +2,9 @@
 @author: Cem Akpolat
 @created by cemakpolat at 2021-12-29
 """
-import json, logging
+
 from flask import jsonify, Blueprint, request
-import printer_decision, util
+import scheduler, util
 
 printingapi = Blueprint('printingapi', __name__)
 
@@ -15,7 +15,7 @@ logger = util.get_logger()
 def assign_printer():
     product_list = request.form.getlist('products[]')
 
-    if product_list and printer_decision.add_to_asset_list(product_list):
+    if product_list and scheduler.add_to_asset_list(product_list):
         res = "The {products} are added to the list".format(products=str(product_list))
         return jsonify({"message": res, "type": "success"})
     else:
@@ -26,11 +26,9 @@ def assign_printer():
 
 @printingapi.route('/printers/assets/status', methods=["GET", "POST"])
 def get_ordered_asset_statuses():
-    # return jsonify(printer_decision.assets_in_printing_list);
-    return jsonify({"message": printer_decision.assets_in_printing_list, "type": "success"})
+    return jsonify({"message": scheduler.assets_in_printing_list, "type": "success"})
 
 
 @printingapi.route('/printers/assets', methods=["GET", "POST"])
 def get_assets_in_printing_process():
-    #return json.dumps({"result": printer_decision.assets_in_printing_list})
-    return jsonify({"message": printer_decision.assets_in_printing_list, "type": "success"})
+    return jsonify({"message": scheduler.assets_in_printing_list, "type": "success"})

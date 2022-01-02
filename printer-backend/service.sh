@@ -1,4 +1,5 @@
 #!/bin/sh
+
 SERVICE_NAME=3D-Printer-Backend
 PID_PATH_NAME=/tmp/printer-backend-pid
 MAIN_PATH=src/main.py
@@ -9,6 +10,7 @@ case $1 in
     install)
         echo "Installing required libraries for $SERVICE_NAME ..."
         $PIP install -r requirements.txt
+        # $PYTHON setup.py install
         echo "Installed required libraries for $SERVICE_NAME ..."
     ;;
     start)

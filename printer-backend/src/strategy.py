@@ -7,3 +7,8 @@ import random
 
 def select_randomly(printers):
     return random.choice(printers)
+
+
+def read_files():
+    pass
+

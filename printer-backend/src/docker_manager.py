@@ -1,16 +1,16 @@
-import logging
 import util
 import docker
 import time
 import os
 
-docker_compose_file_path = '../octoprint-docker'
+
 logger = util.get_logger()
+docker_compose_file_path = '../octoprint-docker'
 
 
 def start_printers(number):
     plist = util.get_available_port_numbers(number)
-    logger.debug("Available port numers are ", plist)
+    logger.debug("Available port numbers are ", plist)
     file_dir = os.path.dirname(os.path.realpath('__file__'))
     for i in range(len(plist)):
         filename = os.path.join(file_dir, docker_compose_file_path+'/docker-compose.yml_backup')

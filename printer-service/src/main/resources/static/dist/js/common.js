@@ -4,8 +4,8 @@ function buildUrl(url, port, rest){
 }
 
 function removeItemOnce(arr, value) {
-  var index = arr.indexOf(value);
-  if (index > -1) {
+    const index = arr.indexOf(value);
+    if (index > -1) {
     arr.splice(index, 1);
   }
   return arr;
@@ -18,7 +18,7 @@ var config = {
 }
 
 function toDateTime(secs) {
-    var t = new Date(1970, 0, 1); // Epoch
+    const t = new Date(1970, 0, 1); // Epoch
     t.setSeconds(secs);
     return t;
 }

@@ -1,9 +1,10 @@
 import threading
 import time
-
 import strategy, octoprint_rest_interface as pr, util, docker_manager
+
 logger = util.get_logger()
 
+PRINTER_INTIATION_MAX_DURATION = 60
 assets_in_printing_list = []
 observer_running = True
 printer_status_list = []
@@ -39,7 +40,7 @@ def check_printer_initiation_duration(starttime):
      Wait 60 seconds for printing initiation, if it is more than this time, this means the printing is already started
     """
     difference = util.time_difference_in_sec(util.get_current_time(), starttime)
-    if difference > 60:
+    if difference > PRINTER_INTIATION_MAX_DURATION:
         return True
 
 
@@ -63,7 +64,6 @@ class PrinterObserver(threading.Thread):
                  args=(), kwargs=None):
         threading.Thread.__init__(self, group=group, target=target, name=name)
         self.args = args
-
         self.kwargs = kwargs
         return
 
@@ -108,7 +108,7 @@ class PrinterObserver(threading.Thread):
 
 def start_observer():
 
-    PrinterObserver(args=(), kwargs={'test': 'data'}).start()
+    PrinterObserver(args=(), kwargs={'': ''}).start()
     logger.info("Printer observer is started..")
 
 

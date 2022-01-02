@@ -3,7 +3,7 @@
 @created by cemakpolat at 2020-07-24
 """
 
-import os, json
+import os
 from flask import jsonify, Blueprint, request
 from werkzeug.utils import secure_filename
 import assets_manager
@@ -19,7 +19,6 @@ ALLOWED_EXTENSIONS = set(['gcode'])
 def get_all_models():
     flist = assets_manager.get_printable_models()
     return jsonify({'message': flist})
-    # return json.dumps({"result": flist})
 
 
 def allowed_file(filename):

@@ -1,4 +1,4 @@
-var productManagement = {
+const productManagement = {
     selectedModelsNames: [],
     dataLoadingFromPrinters: null,
     printableModels: null,
@@ -10,6 +10,7 @@ var productManagement = {
     },
 
     starDataLoading: function () {
+        this.getPrintableProductModels();
         this.dataLoadingFromPrinters = setInterval(this.getPrintableProductModels, 30000);
         console.log(this.dataLoadingFromPrinters);
     },
@@ -21,39 +22,62 @@ var productManagement = {
     removeSelectedModel: function (model) {
         removeItemOnce(productManagement.selectedModelsNames, model);
     },
-    
-    cleanSelectedModelList: function(){
-      this.selectedModelsNames = [];  
+
+    cleanSelectedModelList: function () {
+        this.selectedModelsNames = [];
     },
-    
+
     getPrintableProductModels: function () {
         componentGenerator.cleanPrintableAssets();
         this.printableModels = []
         $.get(buildUrl(productManagement.url, productManagement.port, "/models"))
             .done(function (data) {
-                result = JSON.parse(data);
-                printableModels = result["result"];
-                for (var i = 0; i < printableModels.length; i++) {
-                    componentGenerator.addNewPrintableAsset(i + 1, printableModels[i]);
+                // console.log(data);
+                const models = data["message"];
+                for (let i = 0; i < models.length; i++) {
+                    componentGenerator.addNewPrintableAsset(i + 1, models[i]);
                 }
-                this.printableModels = printableModels;
+                this.printableModels = models;
             }).fail(function () {
-                console.error("Files cannot be received from the folder");
-            });
+            console.error("Files cannot be received from the folder");
+        });
     },
-    
+
     sendPrintRequest: function () {
         console.log("list to be sent", productManagement.selectedModelsNames);
         $.post(buildUrl(productManagement.url, productManagement.port, "/printers/select"), {
                 products: productManagement.selectedModelsNames
             },
             function (returnedData) {
-                data = JSON.parse(returnedData);
-                console.log("print request", data);
+                // console.log("print request", returnedData["message"]);
                 productManagement.cleanSelectedModelList();
             }).fail(function (data) {
-                console.log("error", data);
-            });
+            console.log("error", data);
+        });
+    },
+    uploadFiles: function (form_data) {
+        $.ajax({
+            url: buildUrl(config.url, config.port, "/printers/assets/upload"),
+            dataType: 'json',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: form_data,
+            type: 'post',
+            success: function (response) {
+                $('#msg').html('');
+                $.each(response, function (key, data) {
+                    if (key !== 'message') {
+                        $('#msg').append(key + ' -> ' + data + '<br/>');
+                    } else {
+                        $('#msg').append(data + '<br/>');
+                    }
+                })
+            },
+            error: function (response) {
+                $('#msg').html(response.message); // display error response
+            }
+        });
     }
 
-}
+};

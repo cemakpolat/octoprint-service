@@ -16,12 +16,12 @@ public class PrinterController {
 
     public static String apiKey;
     public static String octoprintURL;
-    private OctoPrintApiInterface printer; //new OctoPrintInterface(octoprintURL,apiKey);
+    private OctoPrintApiInterface printer = new OctoPrintApiInterface(octoprintURL,apiKey);
     private final Boolean virtualModeEnabled = true;
     private final Logger logger = LoggerFactory.getLogger(PrinterController.class);
 
     private PrinterController() {
-        printer = new OctoPrintApiInterface(octoprintURL, apiKey);
+//        printer = new OctoPrintApiInterface(octoprintURL, apiKey);
     }
 
     private OctoPrintApiInterface getPrinter(String port) {
@@ -63,6 +63,7 @@ public class PrinterController {
         if (printer.getPrinterCurrentState().equals(Constants.PrinterState.UNKNOWN) && this.virtualModeEnabled) {
             printer.connectWithVirtualPort();
         }
+        System.out.println("status" + printer.getPrinterCurrentState());
         return new Status(printer.getPrinterCurrentState());
     }
 
@@ -122,6 +123,7 @@ public class PrinterController {
         if (printer.getPrinterCurrentState().equals(Constants.PrinterState.UNKNOWN) && this.virtualModeEnabled) {
             printer.connectWithVirtualPort();
         }
+        System.out.println("status" + printer.getLatestMeasurements().toString());
         return new Status(printer.getLatestMeasurements().toString());
     }
 

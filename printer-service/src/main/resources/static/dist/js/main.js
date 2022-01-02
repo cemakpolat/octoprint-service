@@ -21,14 +21,14 @@ $(document).ready(function () {
 
     $("#docker-status-table").on("click", '.deactivate-btn', function (e) {
         e.preventDefault();
-        var dockerid = $(this).parent().parent().find('.docker-id').attr('name')
+        const dockerid = $(this).parent().parent().find('.docker-id').attr('name');
         console.log(dockerid);
         dockerManager.stopDocker(dockerid);
     });
 
     $("#docker-status-table").on("click", '.activate-btn', function (e) {
         e.preventDefault()
-        var dockerid = $(this).parent().parent().find('.docker-id').attr('name')
+        const dockerid = $(this).parent().parent().find('.docker-id').attr('name');
         console.log(dockerid)
         dockerManager.startDocker(dockerid);
 
@@ -54,7 +54,7 @@ $(document).ready(function () {
     });
 
     $("#startDockers").on("click", function (e) {
-        var printernumber = $("#dockerCount").val()
+        const printernumber = $("#dockerCount").val();
         if (printernumber && $.isNumeric(printernumber)) {
             console.log("dockers will be started")
             dockerManager.startAllDockers(printernumber)
@@ -64,7 +64,7 @@ $(document).ready(function () {
     });
 
     $("#stopDockers").on("click", function (e) {
-        var printernumber = $("#dockerCount").val()
+        const printernumber = $("#dockerCount").val();
         if (printernumber && $.isNumeric(printernumber)) {
             console.log("dockers will be stopped")
             dockerManager.stopAllDockers()
@@ -82,30 +82,30 @@ $(document).ready(function () {
 
     $(document).on('click', '.startPrinter', function (e) {
         e.preventDefault();
-        var tuple = $(this).closest(".printer-item").attr('printer-name-port');
-        var values = tuple.split(",");
+        const tuple = $(this).closest(".printer-item").attr('printer-name-port');
+        const values = tuple.split(",");
         printingManager.startPrintingProcess(values[0], values[1]);
 
     });
 
     $(document).on('click', '.stopPrinter', function (e) {
         e.preventDefault();
-        var tuple = $(this).closest(".printer-item").attr('printer-name-port');
-        var values = tuple.split(",");
+        const tuple = $(this).closest(".printer-item").attr('printer-name-port');
+        const values = tuple.split(",");
         printingManager.stopPrintingProcess(values[0], values[1]);
     });
 
     $(document).on('click', '.resumePrinter', function (e) {
         e.preventDefault();
-        var tuple = $(this).closest(".printer-item").attr('printer-name-port');
-        var values = tuple.split(",");
+        const tuple = $(this).closest(".printer-item").attr('printer-name-port');
+        const values = tuple.split(",");
         printingManager.resumePrintingProcess(values[0], values[1]);
     });
 
     $(document).on('click', '.pausePrinter', function (e) {
         e.preventDefault();
-        var tuple = $(this).closest(".printer-item").attr('printer-name-port');
-        var values = tuple.split(",");
+        const tuple = $(this).closest(".printer-item").attr('printer-name-port');
+        const values = tuple.split(",");
         printingManager.pausePrintingProcess(values[0], values[1]);
     });
 
@@ -118,10 +118,10 @@ $(document).ready(function () {
     }
 
     function stopDataLoading() {
-
         dockerManager.stopDataLoading();
         productManagement.stopDataLoading();
         printingManager.stopDataLoading();
+        productMonitoring.stopDataLoading();
     }
 
     function initiateDataLoading(sectionId) {
@@ -138,21 +138,23 @@ $(document).ready(function () {
         } else if (sectionId == "product-monitoring") {
             productMonitoring.starDataLoading();
         } else if (sectionId == "user-profile"){
-            
+
         }
     }
     $('#upload').on('click', function () {
-        var form_data = new FormData();
-        var ins = document.getElementById('multiFiles').files.length;
+        const form_data = new FormData();
+        const ins = document.getElementById('multiFiles').files.length;
 
         if (ins == 0) {
-            $('#msg').html('<span style="color:red">Select at least one file</span>');
+            $('#msg').html('<span style="color:#ff0000">Select at least one file</span>');
             return;
         }
 
-        for (var x = 0; x < ins; x++) {
+        for (let x = 0; x < ins; x++) {
             form_data.append("files[]", document.getElementById('multiFiles').files[x]);
         }
+        productManagement.uploadFiles(form_data);
+
 
     });
 

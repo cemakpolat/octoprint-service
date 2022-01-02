@@ -16,7 +16,7 @@ ALLOWED_EXTENSIONS = set(['gcode'])
 api_version = "" #"/api/v1"
 
 app.register_blueprint(assetsapi.assetsapi, url_prefix=api_version)
-app.register_blueprint(dockerapi.dockerbp, url_prefix=api_version)
+app.register_blueprint(dockerapi.dockerapi, url_prefix=api_version)
 app.register_blueprint(printingapi.printingapi, url_prefix=api_version)
 app.register_blueprint(userapi.userapi, url_prefix=api_version)
 

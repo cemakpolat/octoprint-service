@@ -1,51 +1,53 @@
-var productMonitoring = {
+const productMonitoring = {
     assetsInPrintingQueue: [],
     port: config.port,
     url: config.url,
     dataLoading: null,
     uploadTime: 5000,
-    
+
     stopDataLoading: function () {
         clearInterval(this.dataLoading)
     },
     starDataLoading: function () {
+        this.getCurrentStatusOfProducts();
         this.dataLoading = setInterval(this.getCurrentStatusOfProducts, this.uploadTime);
     },
-    
+
     getCurrentStatusOfProducts: function () {
         productMonitoring.assetsInPrintingQueue = []
         $.get(buildUrl(productMonitoring.url, productMonitoring.port, "/printers/assets/status"))
             .done(function (jsonData) {
-                for (item in jsonData){
-                    productMonitoring.assetsInPrintingQueue.push(jsonData[item]);
+                const data = jsonData["message"];
+                for (let item in data) {
+                    productMonitoring.assetsInPrintingQueue.push(data[item]);
                 }
                 productMonitoring.getPrintingAssetsPercentage();
             }).fail(function (jsondata) {
-                console.log("Error occured with this data", jsondata)
-            });
+            console.log("Error occured with this data", jsondata)
+        });
     },
 
-    getPrintingAssetsPercentage: function(){
-              
-        for (item in productMonitoring.assetsInPrintingQueue){
-            if (productMonitoring.assetsInPrintingQueue[item].status == "printing"){
-                
-                for (var i = 0; i < dockerManager.activeDockerContainers.length; i++) {
-                    if(productMonitoring.assetsInPrintingQueue[item].assignedPrinterName == dockerManager.activeDockerContainers[i].name){
+    getPrintingAssetsPercentage: function () {
+
+        for (let item in productMonitoring.assetsInPrintingQueue) {
+            if (productMonitoring.assetsInPrintingQueue[item].status == "printing") {
+
+                for (let i = 0; i < dockerManager.activeDockerContainers.length; i++) {
+                    if (productMonitoring.assetsInPrintingQueue[item].assignedPrinterName == dockerManager.activeDockerContainers[i].name) {
                         this.updatePercentage(productMonitoring.assetsInPrintingQueue[item], dockerManager.activeDockerContainers[i].port);
                         break;
                     }
                 }
-            }else{
+            } else {
                 productMonitoring.assetsInPrintingQueue[item].percentage = 0;
                 productMonitoring.assetsInPrintingQueue[item].started = "-";
                 productMonitoring.assetsInPrintingQueue[item].assignedPrinterName = "-";
-            }      
+            }
         }
-        
+
     },
-    updatePercentage: function (item,dockerPort){
-      $.ajax({
+    updatePercentage: function (item, dockerPort) {
+        $.ajax({
             type: "GET",
             url: buildUrl(printingManager.url, printingManager.restport, "/product/status"),
             dataType: "json",
@@ -53,13 +55,13 @@ var productMonitoring = {
                 'port': dockerPort
             },
         }).done(function (jsondata) {
-          
-            data = jsondata['content']
+            // console.log(jsondata);
+            let data = jsondata['status']
             data = JSON.parse(data)
-            console.log(data);
-            for (elem in productMonitoring.assetsInPrintingQueue){
-                if (productMonitoring.assetsInPrintingQueue[elem].name === item.name){
-                    productMonitoring.assetsInPrintingQueue[elem].percentage = Math.round(data["progress"] * 100) / 100;    
+            // console.log(data);
+            for (let elem in productMonitoring.assetsInPrintingQueue) {
+                if (productMonitoring.assetsInPrintingQueue[elem].name === item.name) {
+                    productMonitoring.assetsInPrintingQueue[elem].percentage = Math.round(data["progress"] * 100) / 100;
                     productMonitoring.assetsInPrintingQueue[elem].started = toDateTime(item.started);
                     break;
                 }
@@ -68,33 +70,9 @@ var productMonitoring = {
             componentGenerator.cleanMonitoredProducts();
             componentGenerator.addPrintingAssetsStatuses(productMonitoring.assetsInPrintingQueue);
         })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            console.log("Error occured with this data", jqXHR, textStatus, errorThrown)
-        });
-    },
-    uploadFiles: function(form_data){
-        $.ajax({
-            url: buildUrl(config.url, config.port, "/printers/assets/upload"), 
-            dataType: 'json', 
-            cache: false,
-            contentType: false,
-            processData: false,
-            data: form_data,
-            type: 'post',
-            success: function (response) {
-                $('#msg').html('');
-                $.each(response, function (key, data) {							
-                    if(key !== 'message') {
-                        $('#msg').append(key + ' -> ' + data + '<br/>');
-                    } else {
-                        $('#msg').append(data + '<br/>');
-                    }
-                })
-            },
-            error: function (response) {
-                $('#msg').html(response.message); // display error response
-            }
-        });
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                console.log("Error occured with this data", jqXHR, textStatus, errorThrown)
+            });
     }
-    
-}
+
+};

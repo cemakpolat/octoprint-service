@@ -1,18 +1,18 @@
-var userProfiler = {
+const userProfiler = {
     selectedModelsNames: [],
     dataLoadingFromPrinters: null,
     printableModels: null,
     port: config.port,
     url: config.url,
-    
-    
-    updatePreferencesPercentages: function (eco, time,cost) {
-        console.log(eco, time,cost);
-        this.transmitProfile({eco:eco, time:time, cost:cost});
+
+
+    updatePreferencesPercentages: function (eco, time, cost) {
+        console.log(eco, time, cost);
+        this.transmitProfile({eco: eco, time: time, cost: cost});
     },
-    sendPost: function(params, restUrl, callback){
-        $.post(buildUrl(userProfiler.url, userProfiler.port,restUrl), 
-               params,
+    sendPost: function (params, restUrl, callback) {
+        $.post(buildUrl(userProfiler.url, userProfiler.port, restUrl),
+            params,
             function (returnedData) {
                 data = JSON.parse(returnedData);
                 callback(data);
@@ -20,9 +20,9 @@ var userProfiler = {
             console.log("error");
         });
     },
-    transmitProfile: function(profile){
-        this.sendPost(profile,"/user/preferences",function(data){
+    transmitProfile: function (profile) {
+        this.sendPost(profile, "/user/preferences", function (data) {
             console.log(data);
-        });  
+        });
     }
-}
+};

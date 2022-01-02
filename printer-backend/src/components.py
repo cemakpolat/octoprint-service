@@ -12,7 +12,7 @@ class PrinterOwner:
     The decision will be based on those parameters.
     """
 
-    def __init__(self):
+    def __init__(self, owner, quality, cost, deliveryTime, energyComsumption):
         self.owner = "name"
         self.quality = "resolution"
         self.cost = "0-100"
@@ -23,7 +23,7 @@ class PrinterOwner:
 
 
 class ProductModel:
-    def __init__(self):
+    def __init__(self, name, creator, complexity):
         self.name = "Product Model Name"
         self.creator = "Beagle Bone"
         self.complexity = "100"  # 0-100
@@ -35,15 +35,27 @@ class Printer:
         self.features = ""
 
 
-class User:
-    def __init__(self, user_id):
+class User(object):
+    def __init__(self, user_id, eco=33, cost=33, time=34):
 
         self.user_id = user_id
-        self.eco = 33
-        self.cost = 33
-        self.time = 34
+        self.eco = eco
+        self.cost = cost
+        self.time = time
 
     def update_preferences(self, params):
         self.eco = params['eco']
         self.cost = params['cost']
         self.time = params['time']
+
+
+class User:
+    def __init__(self, name, username):
+        self.name = name
+        self.username = username
+
+import json
+model = '{"name":"cem","username":"akpolat"}'
+j = json.loads(model)
+print(j)
+u = User(**j)
