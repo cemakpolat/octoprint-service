@@ -59,11 +59,15 @@
     printerProfile: _default
     success: true
     timestamp: 1640745707.764682
+  - printTime: 1818.508544921875
+    printerProfile: _default
+    success: true
+    timestamp: 1641084803.760361
   statistics:
     averagePrintTime:
-      _default: 1824.6124915599823
+      _default: 1823.5951671202977
     lastPrintTime:
-      _default: 1818.49977517128
+      _default: 1818.508544921875
 3DBenchy_0.15mm_PLA_MK3S_2h.gcode:
   analysis:
     dimensions:

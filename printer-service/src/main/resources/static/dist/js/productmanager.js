@@ -63,8 +63,8 @@ const productManagement = {
             contentType: false,
             processData: false,
             data: form_data,
-            type: 'post',
-            success: function (response) {
+            type: 'post'
+        }).done(function (response) {
                 $('#msg').html('');
                 $.each(response, function (key, data) {
                     if (key !== 'message') {
@@ -73,10 +73,9 @@ const productManagement = {
                         $('#msg').append(data + '<br/>');
                     }
                 })
-            },
-            error: function (response) {
-                $('#msg').html(response.message); // display error response
-            }
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+                $('#msg').html(jqXHR.responseText); // display error response
         });
     }
 
