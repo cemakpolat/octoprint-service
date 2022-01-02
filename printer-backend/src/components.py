@@ -2,9 +2,28 @@
 @author: Cem Akpolat
 @created by cemakpolat at 2021-12-28
 """
+import json
 
 
-class PrinterOwner:
+class Process:
+    def __init__(self):
+        self.energy_consumption = 10
+        self.climate_effect = 3/10
+        self.cost = 0
+
+
+class DeliveryType:
+
+    def __init__(self):
+        self.cost = "0"
+        self.energy_consumption = "10"
+        self.climate_effect = "3/10"
+        self.owner = "company"
+        self.duration = "10"
+        self.type = "drone"
+
+
+class Printer:
     """
     The purpose of this class is to select the best option that can be used
     In the future, other parameters should be also involved here to make the decision harder
@@ -12,32 +31,24 @@ class PrinterOwner:
     The decision will be based on those parameters.
     """
 
-    def __init__(self, owner, quality, cost, deliveryTime, energyComsumption):
+    def __init__(self, owner, quality, cost, energyComsumption):
         self.owner = "name"
         self.quality = "resolution"
         self.cost = "0-100"
-        self.deliveryTime = "3"
         self.possibleEnergyConsumption = "100"
         self.climateEffect = "0"  # due to the consumed energy!
         self.device = "x-marke"
 
 
-class ProductModel:
+class Product:
     def __init__(self, name, creator, complexity):
         self.name = "Product Model Name"
         self.creator = "Beagle Bone"
         self.complexity = "100"  # 0-100
 
 
-class Printer:
-    def __init__(self):
-        self.name = "Printer Name"
-        self.features = ""
-
-
-class User(object):
+class User:
     def __init__(self, user_id, eco=33, cost=33, time=34):
-
         self.user_id = user_id
         self.eco = eco
         self.cost = cost
@@ -49,13 +60,13 @@ class User(object):
         self.time = params['time']
 
 
-class User:
-    def __init__(self, name, username):
-        self.name = name
-        self.username = username
+def import_json_files():
+    """
+    Convert json model to the app. class object
+    model = '{"name":"cem","username":"akpolat"}'
+    j = json.loads(model)
+    u = User(**j)
+    :return:
+    """
+    pass
 
-import json
-model = '{"name":"cem","username":"akpolat"}'
-j = json.loads(model)
-print(j)
-u = User(**j)

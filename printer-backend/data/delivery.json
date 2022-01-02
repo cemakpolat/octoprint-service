@@ -1,10 +1,9 @@
-
 [
   {
-    "name":"test",
+    "type":"drone",
     "owner": "cem",
-    "resolution_quality": "low",
     "cost": "0",
+    "duration": "30",
     "energy_consumption": "100",
     "climate_effect": "0"
   }
