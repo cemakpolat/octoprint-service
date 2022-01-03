@@ -2,7 +2,6 @@ $(document).ready(function () {
 
     firstPageLoading();
 
-    // left menu panel
     $(".section").on("click", function (e) {
         e.preventDefault();
         if ($(this).hasClass("deactivated")) {
@@ -31,8 +30,8 @@ $(document).ready(function () {
         const dockerid = $(this).parent().parent().find('.docker-id').attr('name');
         console.log(dockerid)
         infrastructureManager.startDocker(dockerid);
-
     });
+
     $("#print-models-btn").on("click", function (e) {
         // send models to the printer
         productManagement.sendPrintRequest();
@@ -76,6 +75,7 @@ $(document).ready(function () {
     $("#stopDataStreaming").on("click", function (e) {
         stopDataLoading();
     });
+
     $("#startDataStreaming").on("click", function (e) {
         initiateDataLoading("setup-environment"); // 
     });
@@ -109,6 +109,20 @@ $(document).ready(function () {
         printingManager.pausePrintingProcess(values[0], values[1]);
     });
 
+    $('#upload').on('click', function () {
+        const form_data = new FormData();
+        const ins = document.getElementById('multiFiles').files.length;
+
+        if (ins == 0) {
+            $('#msg').html('<span style="color:#ff0000">Select at least one file</span>');
+            return;
+        }
+
+        for (let x = 0; x < ins; x++) {
+            form_data.append("files[]", document.getElementById('multiFiles').files[x]);
+        }
+        productManagement.uploadFiles(form_data);
+    });
 
     function firstPageLoading() {
         $(".ss-menu").ssMenu(); // used for left menu
@@ -141,22 +155,6 @@ $(document).ready(function () {
 
         }
     }
-    $('#upload').on('click', function () {
-        const form_data = new FormData();
-        const ins = document.getElementById('multiFiles').files.length;
-
-        if (ins == 0) {
-            $('#msg').html('<span style="color:#ff0000">Select at least one file</span>');
-            return;
-        }
-
-        for (let x = 0; x < ins; x++) {
-            form_data.append("files[]", document.getElementById('multiFiles').files[x]);
-        }
-        productManagement.uploadFiles(form_data);
-
-
-    });
 
 
 });

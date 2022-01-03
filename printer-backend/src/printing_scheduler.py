@@ -4,7 +4,7 @@ import strategy_set, printer_observer as pr, util, infrastructure_manager
 
 logger = util.get_logger()
 
-PRINTER_INTIATION_MAX_DURATION = 60
+PRINTER_INITIATION_MAX_DURATION = 60
 assets_in_printing_list = []
 observer_running = True
 printer_status_list = []
@@ -40,7 +40,7 @@ def check_printer_initiation_duration(starttime):
      Wait 60 seconds for printing initiation, if it is more than this time, this means the printing is already started
     """
     difference = util.time_difference_in_sec(util.get_current_time(), starttime)
-    if difference > PRINTER_INTIATION_MAX_DURATION:
+    if difference > PRINTER_INITIATION_MAX_DURATION:
         return True
 
 
@@ -90,8 +90,6 @@ class PrinterObserver(threading.Thread):
                             if item["assignedPrinterName"] == printer["name"] and item["status"] == "printing" and \
                                     check_printer_initiation_duration(item["started"]):
                                 assets_in_printing_list.remove(item)
-                                # remove item from the printer
-                                #delete_product(printer, item) #
 
                     assign_printer(non_occupied_printers)
 
