@@ -7,13 +7,23 @@ or
 
 `pip install -r requirements.txt`
 
-Run Backend
+or 
+
+`./service.sh install `
+
+Start printer-backend
 
 `python src/main.py`
 
+or 
 
-- https://github.com/closeio/flask-mongorest
-- https://github.com/paurakhsharma/flask-rest-api-blog-series/blob/master/Part%20-%201/movie-bag/app.py
+`./service.sh start`
+
+Stop service
+
+`./service.sh stop`
+
+
 
 
 """
