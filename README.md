@@ -1,4 +1,4 @@
-# octoprint-service
+# Designing Next-Generation 3D Platform for 3D Printer Owners and Customers
 
 The project can be started as follows:
 
